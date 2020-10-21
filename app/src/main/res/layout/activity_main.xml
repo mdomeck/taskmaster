@@ -7,50 +7,80 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="143dp"
-        android:layout_height="42dp"
-        android:text="My Tasks"
+        android:id="@+id/myTaskTitle"
+        android:layout_width="313dp"
+        android:layout_height="39dp"
+        android:text="@string/my_tasks"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.272"
+        app:layout_constraintHorizontal_bias="0.591"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.136" />
+        app:layout_constraintVertical_bias="0.138" />
 
     <Button
         android:id="@+id/addTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Add Task"
-        app:layout_constraintEnd_toStartOf="@+id/allTasksButton"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="164dp"
+        android:text="@string/add_task"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/taskThirdButton" />
 
     <Button
         android:id="@+id/allTasksButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="All Tasks"
+        android:layout_marginTop="164dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/all_tasks"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/addTaskButton"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/taskThirdButton" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="334dp"
-        android:layout_height="377dp"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
+    <Button
+        android:id="@+id/taskFirstButton"
+        android:layout_width="225dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="92dp"
+        android:text="@string/task_the_first"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.451"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/myTaskTitle" />
+
+    <Button
+        android:id="@+id/taskSecondButton"
+        android:layout_width="225dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/task_the_second"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskFirstButton" />
+
+    <Button
+        android:id="@+id/taskThirdButton"
+        android:layout_width="225dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/task_the_third"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskSecondButton" />
+
+    <Button
+        android:id="@+id/settingsButtonHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="164dp"
+        android:text="@string/settings"
+        app:layout_constraintEnd_toStartOf="@+id/allTasksButton"
+        app:layout_constraintStart_toEndOf="@+id/addTaskButton"
+        app:layout_constraintTop_toBottomOf="@+id/taskThirdButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
