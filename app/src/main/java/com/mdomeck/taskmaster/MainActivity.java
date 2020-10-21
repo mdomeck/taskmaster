@@ -3,12 +3,25 @@ package com.mdomeck.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
+        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+        myTaskTitle.setText(greeting);
+        SharedPreferences.Editor preferenceEditor = preferences.edit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button addSettingsButton = MainActivity.this.findViewById(R.id.settingsButtonHome);
+        addSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, Settings.class);
+                startActivity(i);
+            }
+        });
+
         Button allTasksButton = MainActivity.this.findViewById(R.id.allTasksButton);
         allTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,6 +55,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor preferenceEditor = preferences.edit();
+
+        Button selectTaskOneButton = MainActivity.this.findViewById(R.id.taskFirstButton);
+        selectTaskOneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+                Button firstButton = findViewById(R.id.taskFirstButton);
+                preferenceEditor.putString("taskName", firstButton.getText().toString());
+                preferenceEditor.apply();
+               // i.putExtra("taskName",firstButton.getText());
+                MainActivity.this.startActivity(i);
+            }
+        });
+
+        Button selectTaskTwoButton = MainActivity.this.findViewById(R.id.taskSecondButton);
+        selectTaskTwoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+                Button secondButton = findViewById(R.id.taskSecondButton);
+                preferenceEditor.putString("taskName", secondButton.getText().toString());
+                preferenceEditor.apply();
+                //i.putExtra("taskName",secondButton.getText());
+                MainActivity.this.startActivity(i);
+            }
+        });
+
+        Button selectTaskThreeButton = MainActivity.this.findViewById(R.id.taskThirdButton);
+        selectTaskThreeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+                Button thirdButton = findViewById(R.id.taskThirdButton);
+                preferenceEditor.putString("taskName", thirdButton.getText().toString());
+                preferenceEditor.apply();
+                //i.putExtra("taskName",thirdButton.getText());
+                MainActivity.this.startActivity(i);
+            }
+        });
     }
 
 
