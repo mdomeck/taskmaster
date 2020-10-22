@@ -13,9 +13,11 @@ import java.util.ArrayList;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     public ArrayList<Task> task;
+    public OnInteractingWithTaskListener listener;
 
-    public TaskAdapter(ArrayList<Task> task) {
+    public TaskAdapter(ArrayList<Task> task, OnInteractingWithTaskListener listener) {
         this.task = task;
+        this.listener = listener;
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -35,13 +37,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_task, parent, false);
 
-            TaskViewHolder viewHolder = new TaskViewHolder(view);
+            final TaskViewHolder viewHolder = new TaskViewHolder(view);
 
 
-            // TODO onClick Override for clicking
-
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    System.out.println(viewHolder.task.title);
+                    listener.taskListener(viewHolder.task);
+                }
+            });
 
         return viewHolder;
+    }
+
+    public static interface OnInteractingWithTaskListener{
+        public void taskListener(Task task);
     }
 
     @Override

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     @Override
     public void onResume() {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(task));       // TODO add this later
+        recyclerView.setAdapter(new TaskAdapter(task, this));       // TODO add this later
 
 
 
@@ -136,4 +136,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void taskListener(Task task) {
+        Intent intent = new Intent(MainActivity.this, TaskDetail.class);
+        intent.putExtra("title", task.title);
+        intent.putExtra("body", task.body);
+        intent.putExtra("state", task.state);
+        this.startActivity(intent);
+
+    }
 }

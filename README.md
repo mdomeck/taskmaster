@@ -17,3 +17,13 @@
 - Home page updated with Settings button and 3 task buttons
 - Settings page added with username saved to the home screen
 - Task buttons 1, 2, 3 that link and update title depending on what is selected.
+
+### Version 3.0
+![Home Screen Lab 28](screenshots/lab28-HomePage.png)
+
+
+- Home page updated with RecyclerView that scrolls and you can click on the tasks
+- fragment_task.xml to pull the 3 textView items for the tasks
+- Task Model added. Task has title, body and a sta
+- Task Adapter added
+- Task Fragment added
