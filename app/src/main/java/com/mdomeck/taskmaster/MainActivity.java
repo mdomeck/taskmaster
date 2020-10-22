@@ -1,6 +1,8 @@
 package com.mdomeck.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,8 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     @Override
     public void onResume() {
@@ -27,6 +31,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ArrayList<Task> task = new ArrayList<>();
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+        task.add(new Task("Task the First", "body", "state"));
+        task.add(new Task("Task the Second", "body", "state"));
+        task.add(new Task("Task the Third", "body", "state"));
+
+        RecyclerView recyclerView = findViewById(R.id.taskRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(task, this));
+
+
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -100,4 +136,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void taskListener(Task task) {
+        Intent intent = new Intent(MainActivity.this, TaskDetail.class);
+        intent.putExtra("title", task.title);
+        intent.putExtra("body", task.body);
+        intent.putExtra("state", task.state);
+        this.startActivity(intent);
+
+    }
 }
