@@ -101,9 +101,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, TaskDetail.class);
                 Button firstButton = findViewById(R.id.taskFirstButton);
-                preferenceEditor.putString("taskName", firstButton.getText().toString());
-                preferenceEditor.apply();
-               // i.putExtra("taskName",firstButton.getText());
+                i.putExtra("title", firstButton.getText().toString());
+                i.putExtra("body", firstButton.getText().toString());
+                i.putExtra("state", firstButton.getText().toString());
+
+                //  preferenceEditor.apply();
                 MainActivity.this.startActivity(i);
             }
         });
@@ -114,8 +116,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, TaskDetail.class);
                 Button secondButton = findViewById(R.id.taskSecondButton);
-                preferenceEditor.putString("taskName", secondButton.getText().toString());
-                preferenceEditor.apply();
+                i.putExtra("title", secondButton.getText().toString());
+                i.putExtra("body", secondButton.getText().toString());
+                i.putExtra("state", secondButton.getText().toString());
+               // preferenceEditor.putString("taskName", secondButton.getText().toString());
+                //preferenceEditor.apply();
                 //i.putExtra("taskName",secondButton.getText());
                 MainActivity.this.startActivity(i);
             }
@@ -127,8 +132,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, TaskDetail.class);
                 Button thirdButton = findViewById(R.id.taskThirdButton);
-                preferenceEditor.putString("taskName", thirdButton.getText().toString());
-                preferenceEditor.apply();
+                i.putExtra("title", thirdButton.getText().toString());
+                i.putExtra("body", thirdButton.getText().toString());
+                i.putExtra("state", thirdButton.getText().toString());
+               // preferenceEditor.putString("taskName", thirdButton.getText().toString());
+               // preferenceEditor.apply();
                 //i.putExtra("taskName",thirdButton.getText());
                 MainActivity.this.startActivity(i);
             }

@@ -7,11 +7,11 @@
     tools:context=".TaskDetail">
 
     <TextView
-        android:id="@+id/taskDetailsTitle"
+        android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:text="Task Details"
+        android:text="Task Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.228"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskDetailsTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/taskName" />
 
     <TextView
         android:id="@+id/loremIpsumTaskDetails"
@@ -40,5 +40,5 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionTaskDetails"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.07" />
 </androidx.constraintlayout.widget.ConstraintLayout>
