@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(task, this));       // TODO add this later
+        recyclerView.setAdapter(new TaskAdapter(task, this));
 
 
 
