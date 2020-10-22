@@ -21,9 +21,10 @@
 ### Version 3.0
 ![Home Screen Lab 28](screenshots/lab28-HomePage.png)
 
+![Details Screen Lab 28](screenshots/lab28-detailPage.png)
 
-- Home page updated with RecyclerView that scrolls and you can click on the tasks
-- fragment_task.xml to pull the 3 textView items for the tasks
+
+- Home page updated with RecyclerView that scrolls and you click on the title
+- TaskAdapter class that displays data from a list of Tasks
 - Task Model added. Task has title, body and a sta
-- Task Adapter added
-- Task Fragment added
+
