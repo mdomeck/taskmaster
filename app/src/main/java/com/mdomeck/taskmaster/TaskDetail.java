@@ -19,17 +19,15 @@ public class TaskDetail extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView taskName = TaskDetail.this.findViewById(R.id.taskDetailsTitle);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String displayTaskTitle = preferences.getString("taskName", "taskDetails");
-        taskName.setText(displayTaskTitle);
-    }
+        Intent intent = getIntent();
+        TextView titleTask = TaskDetail.this.findViewById(R.id.taskName);
+        TextView bodyTask = TaskDetail.this.findViewById(R.id.loremIpsumTaskDetails);
+        TextView stateTask = TaskDetail.this.findViewById(R.id.descriptionTaskDetails);
 
-//    public void taskDisplay(View view) {
-//        TextView taskName = TaskDetail.this.findViewById(R.id.taskDetailsTitle);
-//        String customTaskName = taskName.getText().toString();
-//        taskName.setText(customTaskName);
-//    }
+        titleTask.setText(intent.getExtras().getString("title"));
+        bodyTask.setText(intent.getExtras().getString("body"));
+        stateTask.setText(intent.getExtras().getString("state"));
+    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
