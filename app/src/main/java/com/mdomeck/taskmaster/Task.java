@@ -1,6 +1,13 @@
 package com.mdomeck.taskmaster;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Task {
+
+        @PrimaryKey(autoGenerate = true)
+        long id;
 
         public String title;
         public String body;

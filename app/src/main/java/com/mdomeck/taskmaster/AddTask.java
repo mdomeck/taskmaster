@@ -15,7 +15,9 @@ import androidx.core.app.NotificationCompat;
 
 import java.nio.channels.Channel;
 
-public class AddTask extends AppCompatActivity {
+public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener{
+
+    Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,11 @@ public class AddTask extends AppCompatActivity {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivityForResult(mtIntent, 0);
         return true;
+
+    }
+
+    @Override
+    public void taskListener(Task task) {
 
     }
 }
