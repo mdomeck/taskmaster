@@ -28,3 +28,11 @@
 - TaskAdapter class that displays data from a list of Tasks
 - Task Model added. Task has title, body and a sta
 
+### Version 4.0
+![Home Screen Lab 29](screenshots/lab29-HomePage.png)
+
+![Add Task Screen Lab 29](screenshots/lab29-AddTask.png)
+
+- Modify Add Task form to save the data entered in as a Task in your local database.
+- Home page updated RecyclerView to display all Task entities in database
+- Detail Page has description and status of a tapped task. Also displayed on the detail page in addition to the title.

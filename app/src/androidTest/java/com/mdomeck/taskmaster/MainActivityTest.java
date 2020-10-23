@@ -24,8 +24,8 @@ import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -37,77 +37,144 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest() {
+    public void mainActivityTest2() {
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.settingsButtonHome), withText("Settings"),
+                allOf(withId(R.id.addTaskButton), withText("Add Task"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                6),
+                                1),
                         isDisplayed()));
         appCompatButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.usernameInputSettings), withText("Enter Username"),
+                allOf(withId(R.id.editTextStatus), withText("Status "),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                8),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("Merry"));
+        appCompatEditText.perform(replaceText("not done"));
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.usernameInputSettings), withText("Merry"),
+                allOf(withId(R.id.editTextStatus), withText("not done"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                8),
                         isDisplayed()));
         appCompatEditText2.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.usernameInputSettings), withText("Merry"),
+                allOf(withId(R.id.editTextDoSomething), withText("Do Something"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                4),
                         isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
+        appCompatEditText3.perform(replaceText("Wash the dog"));
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.saveUsernameButton),
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.editTextDoSomething), withText("Wash the dog"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
+                        isDisplayed()));
+        appCompatEditText4.perform(closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.editTextMyTask), withText("My Task"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatImageButton.perform(click());
+        appCompatEditText5.perform(replaceText("Wellie"));
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(R.id.action_bar),
-                                        childAtPosition(
-                                                withId(R.id.action_bar_container),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.myTaskTitle), withText("Merry's tasks"),
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.editTextMyTask), withText("Wellie"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                0),
+                                3),
                         isDisplayed()));
-        textView.check(matches(withText("Merry's tasks")));
+        appCompatEditText6.perform(closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.editTextMyTask), withText("Wellie"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatEditText7.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText8 = onView(
+                allOf(withId(R.id.editTextDoSomething), withText("Wash the dog"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
+                        isDisplayed()));
+        appCompatEditText8.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText9 = onView(
+                allOf(withId(R.id.editTextStatus), withText("not done"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                8),
+                        isDisplayed()));
+        appCompatEditText9.perform(pressImeActionButton());
+
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.buttonAddTaskSubmit), withText("Add Task"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatButton2.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.titleView), withText("Wellie"),
+                        withParent(allOf(withId(R.id.frameLayout),
+                                withParent(withId(R.id.taskRecycler)))),
+                        isDisplayed()));
+        textView.check(matches(isDisplayed()));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.bodyView), withText("Wash the dog"),
+                        withParent(allOf(withId(R.id.frameLayout),
+                                withParent(withId(R.id.taskRecycler)))),
+                        isDisplayed()));
+        textView2.check(matches(isDisplayed()));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.stateView), withText("not done"),
+                        withParent(allOf(withId(R.id.frameLayout),
+                                withParent(withId(R.id.taskRecycler)))),
+                        isDisplayed()));
+        textView3.check(matches(isDisplayed()));
+
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.stateView), withText("not done"),
+                        withParent(allOf(withId(R.id.frameLayout),
+                                withParent(withId(R.id.taskRecycler)))),
+                        isDisplayed()));
+        textView4.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

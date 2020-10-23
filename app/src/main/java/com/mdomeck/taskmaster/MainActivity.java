@@ -3,6 +3,7 @@ package com.mdomeck.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,9 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
+
+    Database database;
+
 
     @Override
     public void onResume() {
@@ -32,37 +36,20 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<Task> task = new ArrayList<>();
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
-        task.add(new Task("Task the First", "body", "state"));
-        task.add(new Task("Task the Second", "body", "state"));
-        task.add(new Task("Task the Third", "body", "state"));
+        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+                .allowMainThreadQueries()
+                .build();
+
+//        task.add(new Task("Task the First", "body", "state"));
+//        task.add(new Task("Task the Second", "body", "state"));
+//        task.add(new Task("Task the Third", "body", "state"));
+//        task.add(new Task("Task the First", "body", "state"));
+
+        ArrayList<Task> tasks = (ArrayList<Task>) database.taskDao().getAllTasks();
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(task, this));
-
-
+        recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -95,52 +82,52 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
 
-        Button selectTaskOneButton = MainActivity.this.findViewById(R.id.taskFirstButton);
-        selectTaskOneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-                Button firstButton = findViewById(R.id.taskFirstButton);
-                i.putExtra("title", firstButton.getText().toString());
-                i.putExtra("body", firstButton.getText().toString());
-                i.putExtra("state", firstButton.getText().toString());
-
-                //  preferenceEditor.apply();
-                MainActivity.this.startActivity(i);
-            }
-        });
-
-        Button selectTaskTwoButton = MainActivity.this.findViewById(R.id.taskSecondButton);
-        selectTaskTwoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-                Button secondButton = findViewById(R.id.taskSecondButton);
-                i.putExtra("title", secondButton.getText().toString());
-                i.putExtra("body", secondButton.getText().toString());
-                i.putExtra("state", secondButton.getText().toString());
-               // preferenceEditor.putString("taskName", secondButton.getText().toString());
-                //preferenceEditor.apply();
-                //i.putExtra("taskName",secondButton.getText());
-                MainActivity.this.startActivity(i);
-            }
-        });
-
-        Button selectTaskThreeButton = MainActivity.this.findViewById(R.id.taskThirdButton);
-        selectTaskThreeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-                Button thirdButton = findViewById(R.id.taskThirdButton);
-                i.putExtra("title", thirdButton.getText().toString());
-                i.putExtra("body", thirdButton.getText().toString());
-                i.putExtra("state", thirdButton.getText().toString());
-               // preferenceEditor.putString("taskName", thirdButton.getText().toString());
-               // preferenceEditor.apply();
-                //i.putExtra("taskName",thirdButton.getText());
-                MainActivity.this.startActivity(i);
-            }
-        });
+//        Button selectTaskOneButton = MainActivity.this.findViewById(R.id.taskFirstButton);
+//        selectTaskOneButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+//                Button firstButton = findViewById(R.id.taskFirstButton);
+//                i.putExtra("title", firstButton.getText().toString());
+//                i.putExtra("body", firstButton.getText().toString());
+//                i.putExtra("state", firstButton.getText().toString());
+//
+//                //  preferenceEditor.apply();
+//                MainActivity.this.startActivity(i);
+//            }
+//        });
+//
+//        Button selectTaskTwoButton = MainActivity.this.findViewById(R.id.taskSecondButton);
+//        selectTaskTwoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+//                Button secondButton = findViewById(R.id.taskSecondButton);
+//                i.putExtra("title", secondButton.getText().toString());
+//                i.putExtra("body", secondButton.getText().toString());
+//                i.putExtra("state", secondButton.getText().toString());
+//               // preferenceEditor.putString("taskName", secondButton.getText().toString());
+//                //preferenceEditor.apply();
+//                //i.putExtra("taskName",secondButton.getText());
+//                MainActivity.this.startActivity(i);
+//            }
+//        });
+//
+//        Button selectTaskThreeButton = MainActivity.this.findViewById(R.id.taskThirdButton);
+//        selectTaskThreeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
+//                Button thirdButton = findViewById(R.id.taskThirdButton);
+//                i.putExtra("title", thirdButton.getText().toString());
+//                i.putExtra("body", thirdButton.getText().toString());
+//                i.putExtra("state", thirdButton.getText().toString());
+//               // preferenceEditor.putString("taskName", thirdButton.getText().toString());
+//               // preferenceEditor.apply();
+//                //i.putExtra("taskName",thirdButton.getText());
+//                MainActivity.this.startActivity(i);
+//            }
+//        });
     }
 
 
