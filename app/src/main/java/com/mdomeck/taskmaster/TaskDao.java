@@ -20,4 +20,5 @@ public interface TaskDao {
     public List<Task> getAllTasksReversed();
 
 
+
 }
