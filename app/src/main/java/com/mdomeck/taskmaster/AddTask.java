@@ -8,10 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.room.Room;
 
 import java.nio.channels.Channel;
 
@@ -23,6 +25,14 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtask);
+
+        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+                .allowMainThreadQueries()
+                .build();
+
+        final TextView taskTitleTV = findViewById(R.id.editTextMyTask);
+        final TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
+        final TextView statusAddTask = findViewById(R.id.editTextStatus);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -36,11 +46,16 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 
         Button addTaskButton = AddTask.this.findViewById(R.id.buttonAddTaskSubmit);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
+
+
+
             @Override
             public void onClick(View view) {
                 toast.show();
-
-
+            Task newTask = new Task(taskTitleTV.getText().toString(), taskDescriptionTV.getText().toString(), statusAddTask.getText().toString());
+            database.taskDao().saveTask(newTask);
+            Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
+            AddTask.this.startActivity(goToMainActivity);
             }
         });
 
