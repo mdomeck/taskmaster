@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.core.Amplify;
 
 import java.util.ArrayList;
@@ -41,8 +42,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         setContentView(R.layout.activity_main);
 
         try {
+            Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
-            Log.i("MyAmplifyApp", "Initialized Amplify");
+
+            // Add a task // TODO: not working yet
+//            Task addTask = Task.builder()
+//                    .title("Dog Bath")
+//                    .description("Wash with Soap")
+//                    .state("Not done").build();
+
+            //Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
@@ -51,10 +60,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 .allowMainThreadQueries()
                 .build();
 
-//        task.add(new Task("Task the First", "body", "state"));
-//        task.add(new Task("Task the Second", "body", "state"));
-//        task.add(new Task("Task the Third", "body", "state"));
-//        task.add(new Task("Task the First", "body", "state"));
 
         ArrayList<Task> tasks = (ArrayList<Task>) database.taskDao().getAllTasks();
 
@@ -92,53 +97,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
-
-//        Button selectTaskOneButton = MainActivity.this.findViewById(R.id.taskFirstButton);
-//        selectTaskOneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button firstButton = findViewById(R.id.taskFirstButton);
-//                i.putExtra("title", firstButton.getText().toString());
-//                i.putExtra("body", firstButton.getText().toString());
-//                i.putExtra("state", firstButton.getText().toString());
-//
-//                //  preferenceEditor.apply();
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
-//
-//        Button selectTaskTwoButton = MainActivity.this.findViewById(R.id.taskSecondButton);
-//        selectTaskTwoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button secondButton = findViewById(R.id.taskSecondButton);
-//                i.putExtra("title", secondButton.getText().toString());
-//                i.putExtra("body", secondButton.getText().toString());
-//                i.putExtra("state", secondButton.getText().toString());
-//               // preferenceEditor.putString("taskName", secondButton.getText().toString());
-//                //preferenceEditor.apply();
-//                //i.putExtra("taskName",secondButton.getText());
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
-//
-//        Button selectTaskThreeButton = MainActivity.this.findViewById(R.id.taskThirdButton);
-//        selectTaskThreeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button thirdButton = findViewById(R.id.taskThirdButton);
-//                i.putExtra("title", thirdButton.getText().toString());
-//                i.putExtra("body", thirdButton.getText().toString());
-//                i.putExtra("state", thirdButton.getText().toString());
-//               // preferenceEditor.putString("taskName", thirdButton.getText().toString());
-//               // preferenceEditor.apply();
-//                //i.putExtra("taskName",thirdButton.getText());
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
     }
 
 
