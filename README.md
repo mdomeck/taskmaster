@@ -36,3 +36,9 @@
 - Modify Add Task form to save the data entered in as a Task in your local database.
 - Home page updated RecyclerView to display all Task entities in database
 - Detail Page has description and status of a tapped task. Also displayed on the detail page in addition to the title.
+
+### Version 5.0
+
+- Added Expresso tests.
+- verified all features are working
+- no new features to take pictures of
