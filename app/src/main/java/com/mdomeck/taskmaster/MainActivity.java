@@ -1,17 +1,32 @@
 package com.mdomeck.taskmaster;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.ArrayList;
 
@@ -19,7 +34,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     Database database;
-
+    ArrayList<Task> tasks;
+    NotificationChannel channel;
+    NotificationManager notificationManager;
+    RecyclerView recyclerView;
 
     @Override
     public void onResume() {
@@ -28,28 +46,57 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
         String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
         myTaskTitle.setText(greeting);
-        SharedPreferences.Editor preferenceEditor = preferences.edit();
+        //SharedPreferences.Editor preferenceEditor = preferences.edit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+        try {
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.configure(getApplicationContext());
+
+            Log.i("MyAmplifyApp", "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+        }
+
         database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+                .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
 
-//        task.add(new Task("Task the First", "body", "state"));
-//        task.add(new Task("Task the Second", "body", "state"));
-//        task.add(new Task("Task the Third", "body", "state"));
-//        task.add(new Task("Task the First", "body", "state"));
-
-        ArrayList<Task> tasks = (ArrayList<Task>) database.taskDao().getAllTasks();
+        tasks = new ArrayList<Task>();
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasks, this));
+
+        Handler handler = new Handler(Looper.getMainLooper(),
+                new Handler.Callback(){
+
+                @Override
+                        public boolean handleMessage(@NonNull Message message) {
+                            recyclerView.getAdapter().notifyDataSetChanged();
+                            return false;
+                }
+        });
+
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                response -> {
+                    for(Task task : response.getData()) {
+                        tasks.add(task);
+                    }
+                    handler.sendEmptyMessage(1);
+                    Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
+                },
+              error -> Log.i("Amplify.queryItems", "did not get items"));
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -81,62 +128,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
-
-//        Button selectTaskOneButton = MainActivity.this.findViewById(R.id.taskFirstButton);
-//        selectTaskOneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button firstButton = findViewById(R.id.taskFirstButton);
-//                i.putExtra("title", firstButton.getText().toString());
-//                i.putExtra("body", firstButton.getText().toString());
-//                i.putExtra("state", firstButton.getText().toString());
-//
-//                //  preferenceEditor.apply();
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
-//
-//        Button selectTaskTwoButton = MainActivity.this.findViewById(R.id.taskSecondButton);
-//        selectTaskTwoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button secondButton = findViewById(R.id.taskSecondButton);
-//                i.putExtra("title", secondButton.getText().toString());
-//                i.putExtra("body", secondButton.getText().toString());
-//                i.putExtra("state", secondButton.getText().toString());
-//               // preferenceEditor.putString("taskName", secondButton.getText().toString());
-//                //preferenceEditor.apply();
-//                //i.putExtra("taskName",secondButton.getText());
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
-//
-//        Button selectTaskThreeButton = MainActivity.this.findViewById(R.id.taskThirdButton);
-//        selectTaskThreeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, TaskDetail.class);
-//                Button thirdButton = findViewById(R.id.taskThirdButton);
-//                i.putExtra("title", thirdButton.getText().toString());
-//                i.putExtra("body", thirdButton.getText().toString());
-//                i.putExtra("state", thirdButton.getText().toString());
-//               // preferenceEditor.putString("taskName", thirdButton.getText().toString());
-//               // preferenceEditor.apply();
-//                //i.putExtra("taskName",thirdButton.getText());
-//                MainActivity.this.startActivity(i);
-//            }
-//        });
     }
 
 
     @Override
     public void taskListener(Task task) {
         Intent intent = new Intent(MainActivity.this, TaskDetail.class);
-        intent.putExtra("title", task.title);
-        intent.putExtra("body", task.body);
-        intent.putExtra("state", task.state);
+        intent.putExtra("title", task.getTitle());
+        intent.putExtra("body", task.getBody());
+        intent.putExtra("state", task.getState());
         this.startActivity(intent);
 
     }

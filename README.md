@@ -14,7 +14,7 @@
 ![Second Task Lab 27](screenshots/lab27-secondDetail.png)
 ![Third Task Lab 27](screenshots/lab27-thirdDetail.png)
 
-- Home page updated with Settings button and 3 task buttons
+- Home page updated with Settings button and 3 taskLocal buttons
 - Settings page added with username saved to the home screen
 - Task buttons 1, 2, 3 that link and update title depending on what is selected.
 
@@ -35,10 +35,19 @@
 
 - Modify Add Task form to save the data entered in as a Task in your local database.
 - Home page updated RecyclerView to display all Task entities in database
-- Detail Page has description and status of a tapped task. Also displayed on the detail page in addition to the title.
+- Detail Page has description and status of a tapped taskLocal. Also displayed on the detail page in addition to the title.
 
 ### Version 5.0
 
 - Added Expresso tests.
 - verified all features are working
 - no new features to take pictures of
+
+### Version 6.0
+![Home Screen Lab 32](screenshots/lab32-HomePage.png)
+
+![Add Task Screen Lab 32](screenshots/lab32-aws.png)
+
+- Using `amplify add api` updated all Task data to instead use AWS Amplify
+- Modify Add Task to save the data entered in as a task to DynamoDB
+- Refactor homepage RecyclerView to display all Task entities in DynamoDB
