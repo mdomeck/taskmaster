@@ -3,6 +3,7 @@ package com.mdomeck.taskmaster;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener{
@@ -48,9 +51,21 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 
             @Override
             public void onClick(View view) {
+
                 toast.show();
-            //Task newTask = new Task(taskTitleTV.getText().toString(), taskDescriptionTV.getText().toString(), statusAddTask.getText().toString());
-            //database.taskDao().saveTask(newTask);
+                // Add a task
+            Task addTask = Task.builder()
+                    .title(taskTitleTV.getText().toString())
+                    .body(taskDescriptionTV.getText().toString())
+                    .state(statusAddTask.getText().toString()).build();
+
+            Amplify.API.mutate(ModelMutation.create(addTask),
+                    response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
+                    error -> Log.e("amplify", error.toString()));
+
+                database.taskDao().saveTask(addTask);
+
+
             Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
             AddTask.this.startActivity(goToMainActivity);
             }

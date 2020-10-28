@@ -1,13 +1,21 @@
 package com.mdomeck.taskmaster;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +24,7 @@ import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 
@@ -26,38 +34,32 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     Database database;
+    ArrayList<Task> tasks;
+    NotificationChannel channel;
+    NotificationManager notificationManager;
+    RecyclerView recyclerView;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
+        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+        myTaskTitle.setText(greeting);
+        //SharedPreferences.Editor preferenceEditor = preferences.edit();
+    }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-//        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-//        myTaskTitle.setText(greeting);
-//        SharedPreferences.Editor preferenceEditor = preferences.edit();
-//    }
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
-
-            // Add a task
-            Task addTask = Task.builder()
-                    .title("Dog Bath")
-                    .body("Wash with Soap")
-                    .state("Not done").build();
-
-            Amplify.API.mutate(ModelMutation.create(addTask),
-                    response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
-                    error -> Log.e("amplify", error.toString()));
-
-            database.taskDao().saveTask(addTask);
 
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
@@ -69,12 +71,32 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 .allowMainThreadQueries()
                 .build();
 
+        tasks = new ArrayList<Task>();
 
-        //ArrayList<TaskLocal> taskLocals = (ArrayList<TaskLocal>) database.taskDao().getAllTasks();
+        RecyclerView recyclerView = findViewById(R.id.taskRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
-//        RecyclerView recyclerView = findViewById(R.id.taskRecycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(new TaskAdapter(task, this));
+        Handler handler = new Handler(Looper.getMainLooper(),
+                new Handler.Callback(){
+
+                @Override
+                        public boolean handleMessage(@NonNull Message message) {
+                            recyclerView.getAdapter().notifyDataSetChanged();
+                            return false;
+                }
+        });
+
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                response -> {
+                    for(Task task : response.getData()) {
+                        tasks.add(task);
+                    }
+                    handler.sendEmptyMessage(1);
+                    Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
+                },
+              error -> Log.i("Amplify.queryItems", "did not get items"));
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
