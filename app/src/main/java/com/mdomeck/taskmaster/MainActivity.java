@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 //                    .description("Wash with Soap")
 //                    .state("Not done").build();
 
-            //Log.i("MyAmplifyApp", "Initialized Amplify");
+            Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
