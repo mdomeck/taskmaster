@@ -42,3 +42,12 @@
 - Added Expresso tests.
 - verified all features are working
 - no new features to take pictures of
+
+### Version 6.0
+![Home Screen Lab 32](screenshots/lab32-HomePage.png)
+
+![Add Task Screen Lab 32](screenshots/lab32-aws.png)
+
+- Using `amplify add api` updated all Task data to instead use AWS Amplify
+- Modify Add Task to save the data entered in as a task to DynamoDB
+- Refactor homepage RecyclerView to display all Task entities in DynamoDB
