@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.ArrayList;
 
@@ -26,15 +28,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     Database database;
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-        myTaskTitle.setText(greeting);
-        SharedPreferences.Editor preferenceEditor = preferences.edit();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
+//        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+//        myTaskTitle.setText(greeting);
+//        SharedPreferences.Editor preferenceEditor = preferences.edit();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
 
-            // Add a task // TODO: not working yet
-//            Task addTask = Task.builder()
-//                    .title("Dog Bath")
-//                    .description("Wash with Soap")
-//                    .state("Not done").build();
+            // Add a task
+            Task addTask = Task.builder()
+                    .title("Dog Bath")
+                    .body("Wash with Soap")
+                    .state("Not done").build();
+
+            Amplify.API.mutate(ModelMutation.create(addTask),
+                    response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
+                    error -> Log.e("amplify", error.toString()));
+
+            database.taskDao().saveTask(addTask);
 
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
@@ -57,15 +65,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         }
 
         database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+                .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
 
 
-        ArrayList<Task> tasks = (ArrayList<Task>) database.taskDao().getAllTasks();
+        //ArrayList<TaskLocal> taskLocals = (ArrayList<TaskLocal>) database.taskDao().getAllTasks();
 
-        RecyclerView recyclerView = findViewById(R.id.taskRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasks, this));
+//        RecyclerView recyclerView = findViewById(R.id.taskRecycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(new TaskAdapter(task, this));
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -103,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     @Override
     public void taskListener(Task task) {
         Intent intent = new Intent(MainActivity.this, TaskDetail.class);
-        intent.putExtra("title", task.title);
-        intent.putExtra("body", task.body);
-        intent.putExtra("state", task.state);
+        intent.putExtra("title", task.getTitle());
+        intent.putExtra("body", task.getBody());
+        intent.putExtra("state", task.getState());
         this.startActivity(intent);
 
     }
