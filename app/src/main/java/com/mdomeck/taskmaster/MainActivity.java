@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 @Override
                         public boolean handleMessage(@NonNull Message message) {
                             recyclerView.getAdapter().notifyDataSetChanged();
-                            return false;
+                            return true;
                 }
         });
 

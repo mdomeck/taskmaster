@@ -17,7 +17,7 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 
-public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener{
+public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     Database database;
 
@@ -27,6 +27,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         setContentView(R.layout.activity_addtask);
 
         database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+                .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
 
@@ -48,26 +49,26 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         addTaskButton.setOnClickListener(new View.OnClickListener() {
 
 
-
             @Override
             public void onClick(View view) {
 
                 toast.show();
                 // Add a task
-            Task addTask = Task.builder()
-                    .title(taskTitleTV.getText().toString())
-                    .body(taskDescriptionTV.getText().toString())
-                    .state(statusAddTask.getText().toString()).build();
+                Task addTask = Task.builder()
+                        .title(taskTitleTV.getText().toString())
+                        .body(taskDescriptionTV.getText().toString())
+                        .state(statusAddTask.getText().toString()).build();
 
-            Amplify.API.mutate(ModelMutation.create(addTask),
-                    response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
-                    error -> Log.e("amplify", error.toString()));
+                Amplify.API.mutate(ModelMutation.create(addTask),
+                        response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
+                        error -> Log.e("amplify", error.toString()));
 
                 database.taskDao().saveTask(addTask);
 
-
-            Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
-            AddTask.this.startActivity(goToMainActivity);
+                //finish();
+                onBackPressed();
+                //Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
+                //AddTask.this.startActivity(goToMainActivity);
             }
         });
 
