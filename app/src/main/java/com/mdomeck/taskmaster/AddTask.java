@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     //  Database database;
-    int teamWeAreOnIndex = 0;
+    //int teamWeAreOnIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,9 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 //                .allowMainThreadQueries()
 //                .build();
 
-        final TextView taskTitleTV = findViewById(R.id.editTextMyTask);
-        final TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
-        final TextView statusAddTask = findViewById(R.id.editTextStatus);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         //Thanks David
         //https://developer.android.com/guide/topics/ui/notifiers/toasts.html
@@ -71,20 +70,32 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             @Override
             public void onClick(View view) {
 
-                toast.show();
 
-                //RadioGroup getBox = AddTask.this.findViewById(R.id.radioGroup);
+                RadioGroup getBox = AddTask.this.findViewById(R.id.radioGroup);
+                RadioButton selectedTeam = AddTask.this.findViewById(getBox.getCheckedRadioButtonId());
+                String teamName = selectedTeam.getText().toString();
+                Team chosenTeam = null;
+                for (int i = 0; i < teams.size(); i++) {
+                    if(teams.get(i).getName().equals(teamName)) {
+                        chosenTeam = teams.get(i);
+                    }
+                }
 
-
+                TextView taskTitleTV = findViewById(R.id.editTextMyTask);
+                TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
+                //TextView statusAddTask = findViewById(R.id.editTextStatus);
 
                 // Add a task
-                Team hardCodeTeam = teams.get(0);
+                //Team hardCodeTeam = teams.get(0);
 
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
-                        .state(statusAddTask.getText().toString())
-                        .apartOf(hardCodeTeam).build();
+                        .state("new").apartOf(chosenTeam).build();
+
+
+                    //    .state(statusAddTask.getText().toString())
+                    //    .apartOf(hardCodeTeam).build();
 
 
                 Amplify.API.mutate(ModelMutation.create(addTask),
@@ -95,11 +106,13 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 //    database.taskDao().saveTask(addTask);
 
                 //finish();
+                toast.show();
                 onBackPressed();
                 //Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
                 //AddTask.this.startActivity(goToMainActivity);
             }
         });
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

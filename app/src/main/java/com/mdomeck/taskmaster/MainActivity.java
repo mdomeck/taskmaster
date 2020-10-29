@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
         String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
         myTaskTitle.setText(greeting);
-        //SharedPreferences.Editor preferenceEditor = preferences.edit();
+
+        String teamChosen = preferences.getString("teamChosen", "No team chosen");
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,10 +69,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
             //setUpThreeTeams();
 
-            Log.i("MyAmplifyApp", "Initialized Amplify");
+            //Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor preferenceEditor = preferences.edit();
+
+        TextView myTaskTitle = findViewById(R.id.myTaskTitle);
+        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+        myTaskTitle.setText(greeting);
 
 //        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
 //                .fallbackToDestructiveMigration()
@@ -97,7 +106,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 ModelQuery.list(Task.class),
                 response -> {
                     for(Task task : response.getData()) {
-                        tasks.add(task);
+                        if(preferences.contains("teamChosen")){
+                            if(task.apartOf.getName().equals(preferences.getString("teamChosen", " "))){
+                                tasks.add(task);
+                            }
+                        } else {
+                            tasks.add(task);
+                        }
                     }
                     handler.sendEmptyMessage(1);
                     Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
@@ -132,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         });
 
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor preferenceEditor = preferences.edit();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        final SharedPreferences.Editor preferenceEditor = preferences.edit();
     }
 
 
