@@ -24,20 +24,27 @@ import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-    Database database;
+   // Database database;
     ArrayList<Task> tasks;
+    ArrayList<Team> teams;
     NotificationChannel channel;
     NotificationManager notificationManager;
     RecyclerView recyclerView;
+    Handler handler;
+    Handler handleSingleItemAdded;
+    int teamWeAreOnIndex = 0;
+
 
     @Override
     public void onResume() {
@@ -59,15 +66,19 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
 
+            //setUpThreeTeams();
+
+
+
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
 
-        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
-                .build();
+//        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+//                .fallbackToDestructiveMigration()
+//                .allowMainThreadQueries()
+//                .build();
 
         tasks = new ArrayList<Task>();
 
@@ -126,6 +137,37 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
+    }
+
+
+    public void setUpThreeTeams(){
+        Team team1 = Team.builder()
+                .name("Mickey")
+                .build();
+
+        Team team2 = Team.builder()
+                .name("Minnie")
+                .build();
+        Team team3 = Team.builder()
+                .name("Daisy")
+                .build();
+
+        Amplify.API.mutate(ModelMutation.create(team1),
+                response -> Log.i("Amplify", "added a team"),
+                error -> Log.e("Amplify", "failed to add a team")
+        );
+
+        Amplify.API.mutate(ModelMutation.create(team2),
+                response -> Log.i("Amplify", "added a team"),
+                error -> Log.e("Amplify", "failed to add a team")
+        );
+
+        Amplify.API.mutate(ModelMutation.create(team3),
+                response -> Log.i("Amplify", "added a team"),
+                error -> Log.e("Amplify", "failed to add a team")
+        );
+
+
     }
 
 

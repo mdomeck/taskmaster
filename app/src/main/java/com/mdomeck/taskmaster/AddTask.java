@@ -19,17 +19,17 @@ import com.amplifyframework.datastore.generated.model.Task;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-    Database database;
+  //  Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtask);
 
-        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
-                .build();
+//        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
+//                .fallbackToDestructiveMigration()
+//                .allowMainThreadQueries()
+//                .build();
 
         final TextView taskTitleTV = findViewById(R.id.editTextMyTask);
         final TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
@@ -63,7 +63,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
 
-                database.taskDao().saveTask(addTask);
+            //    database.taskDao().saveTask(addTask);
 
                 //finish();
                 onBackPressed();
