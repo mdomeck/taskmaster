@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,17 +15,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
+
+import java.util.ArrayList;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-  //  Database database;
+    //  Database database;
+    int teamWeAreOnIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtask);
+
+        ArrayList<Team> teams = new ArrayList<>();
+
+        Amplify.API.query(
+                ModelQuery.list(Team.class),
+                response -> {
+                    for (Team team : response.getData()) {
+                        teams.add(team);
+                    }
+                    //handler.sendEmptyMessage(1);
+                },
+                error -> Log.e("Amplify", "failed to retrieve team")
+        );
+
 
 //        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
 //                .fallbackToDestructiveMigration()
@@ -48,22 +68,31 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         Button addTaskButton = AddTask.this.findViewById(R.id.buttonAddTaskSubmit);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View view) {
 
                 toast.show();
+
+                //RadioGroup getBox = AddTask.this.findViewById(R.id.radioGroup);
+
+
+
                 // Add a task
+                Team hardCodeTeam = teams.get(0);
+
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
-                        .state(statusAddTask.getText().toString()).build();
+                        .state(statusAddTask.getText().toString())
+                        .apartOf(hardCodeTeam).build();
+
 
                 Amplify.API.mutate(ModelMutation.create(addTask),
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
 
-            //    database.taskDao().saveTask(addTask);
+
+                //    database.taskDao().saveTask(addTask);
 
                 //finish();
                 onBackPressed();

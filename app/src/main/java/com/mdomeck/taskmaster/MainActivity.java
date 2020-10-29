@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     Handler handleSingleItemAdded;
     int teamWeAreOnIndex = 0;
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -67,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.configure(getApplicationContext());
 
             //setUpThreeTeams();
-
-
 
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
