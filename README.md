@@ -51,3 +51,13 @@
 - Using `amplify add api` updated all Task data to instead use AWS Amplify
 - Modify Add Task to save the data entered in as a task to DynamoDB
 - Refactor homepage RecyclerView to display all Task entities in DynamoDB
+
+### Version 7.0
+![Settings Lab 33](screenshots/lab33-settings.png)
+
+![Add Task Lab 33](screenshots/lab33-addTask.png)
+
+- create a second entity for a team 
+- create 3 teams
+- Modify Add Task to include radio buttons for which team that task belongs to
+- Settings page updated to allow username and choosing their team.
