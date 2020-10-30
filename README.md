@@ -61,3 +61,11 @@
 - create 3 teams
 - Modify Add Task to include radio buttons for which team that task belongs to
 - Settings page updated to allow username and choosing their team.
+
+### Version 8.0
+![Home Page Lab 33.5](screenshots/lab33-daisy.png)
+
+![Home Page Lab 33.5](screenshots/lab33-minnie.png)
+
+- Home page only shows tasks for the team the user selects on the settings page.
+- Added a text view to display the team the user is on
