@@ -29,14 +29,12 @@ public class Settings extends AppCompatActivity {
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
         findViewById(R.id.saveUsernameButton).setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View view) {
 
                 RadioGroup getBox = Settings.this.findViewById(R.id.radioGroup);
                 RadioButton selectedButton = Settings.this.findViewById(getBox.getCheckedRadioButtonId());
                 String userTeam = selectedButton.getText().toString();
-
 
                 EditText username = findViewById(R.id.usernameInputSettings);
                 preferenceEditor.putString("savedUsername", username.getText().toString());
@@ -46,12 +44,10 @@ public class Settings extends AppCompatActivity {
                 onBackPressed();
             }
         });
-            //TODO save the team here
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivityForResult(mtIntent, 0);
         return true;
-
     }
 }
