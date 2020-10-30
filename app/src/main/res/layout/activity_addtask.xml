@@ -126,19 +126,19 @@
             android:id="@+id/team1radioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Team Mickey" />
+            android:text="Mickey" />
 
         <RadioButton
             android:id="@+id/team2radioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Team Minnie" />
+            android:text="Minnie" />
 
         <RadioButton
             android:id="@+id/team3radioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Team Daisy" />
+            android:text="Daisy" />
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,11 +55,39 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         String teamChosen = preferences.getString("teamChosen", "No team chosen");
 
+
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                response -> {
+                    tasks.clear(); //keeps the same array list but empties it
+                    for(Task task : response.getData()) {
+                        if(preferences.contains("teamChosen")){
+                            if(task.apartOf.getName().equals(preferences.getString("teamChosen", " "))){
+                                tasks.add(task);
+                            }
+                        } else {
+                            tasks.add(task);
+                        }
+                    }
+                    handler.sendEmptyMessage(1);
+                    Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
+                },
+              error -> Log.i("Amplify.queryItems", "did not get items"));
+
+
+
+
+
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -92,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
-        Handler handler = new Handler(Looper.getMainLooper(),
+        handler = new Handler(Looper.getMainLooper(),
                 new Handler.Callback(){
 
                 @Override
@@ -102,22 +130,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 }
         });
 
-        Amplify.API.query(
-                ModelQuery.list(Task.class),
-                response -> {
-                    for(Task task : response.getData()) {
-                        if(preferences.contains("teamChosen")){
-                            if(task.apartOf.getName().equals(preferences.getString("teamChosen", " "))){
-                                tasks.add(task);
-                            }
-                        } else {
-                            tasks.add(task);
-                        }
-                    }
-                    handler.sendEmptyMessage(1);
-                    Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
-                },
-              error -> Log.i("Amplify.queryItems", "did not get items"));
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 response -> Log.i("Amplify", "added a team"),
                 error -> Log.e("Amplify", "failed to add a team")
         );
-
 
     }
 

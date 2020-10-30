@@ -46,14 +46,10 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 error -> Log.e("Amplify", "failed to retrieve team")
         );
 
-
 //        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
 //                .fallbackToDestructiveMigration()
 //                .allowMainThreadQueries()
 //                .build();
-
-
-
 
 
         //Thanks David
@@ -70,7 +66,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             @Override
             public void onClick(View view) {
 
-
                 RadioGroup getBox = AddTask.this.findViewById(R.id.radioGroup);
                 RadioButton selectedTeam = AddTask.this.findViewById(getBox.getCheckedRadioButtonId());
                 String teamName = selectedTeam.getText().toString();
@@ -85,17 +80,10 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
                 //TextView statusAddTask = findViewById(R.id.editTextStatus);
 
-                // Add a task
-                //Team hardCodeTeam = teams.get(0);
-
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
                         .state("new").apartOf(chosenTeam).build();
-
-
-                    //    .state(statusAddTask.getText().toString())
-                    //    .apartOf(hardCodeTeam).build();
 
 
                 Amplify.API.mutate(ModelMutation.create(addTask),
