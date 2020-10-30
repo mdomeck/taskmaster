@@ -51,9 +51,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 //                .allowMainThreadQueries()
 //                .build();
 
-
-        //Thanks David
-        //https://developer.android.com/guide/topics/ui/notifiers/toasts.html
         Context context = getApplicationContext();
         CharSequence text = "Submitted!";
         int duration = Toast.LENGTH_SHORT;
@@ -71,48 +68,39 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 String teamName = selectedTeam.getText().toString();
                 Team chosenTeam = null;
                 for (int i = 0; i < teams.size(); i++) {
-                    if(teams.get(i).getName().equals(teamName)) {
+                    if (teams.get(i).getName().equals(teamName)) {
                         chosenTeam = teams.get(i);
                     }
                 }
 
                 TextView taskTitleTV = findViewById(R.id.editTextMyTask);
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
-                //TextView statusAddTask = findViewById(R.id.editTextStatus);
 
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
                         .state("new").apartOf(chosenTeam).build();
 
-
                 Amplify.API.mutate(ModelMutation.create(addTask),
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
 
-
                 //    database.taskDao().saveTask(addTask);
 
-                //finish();
                 toast.show();
                 onBackPressed();
-                //Intent goToMainActivity = new Intent(AddTask.this, MainActivity.class);
-                //AddTask.this.startActivity(goToMainActivity);
             }
         });
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivityForResult(mtIntent, 0);
         return true;
-
     }
 
     @Override
     public void taskListener(Task task) {
-
     }
 }

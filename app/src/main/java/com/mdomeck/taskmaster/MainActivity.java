@@ -35,14 +35,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-   // Database database;
+    // Database database;
     ArrayList<Task> tasks;
-    ArrayList<Team> teams;
-    NotificationChannel channel;
-    NotificationManager notificationManager;
-    RecyclerView recyclerView;
     Handler handler;
-    Handler handleSingleItemAdded;
     int teamWeAreOnIndex = 0;
 
     @Override
@@ -63,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 ModelQuery.list(Task.class),
                 response -> {
                     tasks.clear(); //keeps the same array list but empties it
-                    for(Task task : response.getData()) {
-                        if(preferences.contains("teamChosen")){
-                            if(task.apartOf.getName().equals(preferences.getString("teamChosen", " "))){
+                    for (Task task : response.getData()) {
+                        if (preferences.contains("teamChosen")) {
+                            if (task.apartOf.getName().equals(preferences.getString("teamChosen", " "))) {
                                 tasks.add(task);
                             }
                         } else {
@@ -75,20 +70,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                     handler.sendEmptyMessage(1);
                     Log.i("Amplify.queryItems", "received from Dynamo " + tasks.size());
                 },
-              error -> Log.i("Amplify.queryItems", "did not get items"));
-
-
-
-
-
+                error -> Log.i("Amplify.queryItems", "did not get items"));
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
 
         super.onCreate(savedInstanceState);
@@ -124,14 +112,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
         handler = new Handler(Looper.getMainLooper(),
-                new Handler.Callback(){
+                new Handler.Callback() {
 
-                @Override
-                        public boolean handleMessage(@NonNull Message message) {
-                            recyclerView.getAdapter().notifyDataSetChanged();
-                            return true;
-                }
-        });
+                    @Override
+                    public boolean handleMessage(@NonNull Message message) {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        return true;
+                    }
+                });
 
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
@@ -160,14 +148,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 startActivity(i);
             }
         });
-
-
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        final SharedPreferences.Editor preferenceEditor = preferences.edit();
     }
 
 
-    public void setUpThreeTeams(){
+    public void setUpThreeTeams() {
         Team team1 = Team.builder()
                 .name("Mickey")
                 .build();
