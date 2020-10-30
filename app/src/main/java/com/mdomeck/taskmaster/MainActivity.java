@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
         myTaskTitle.setText(greeting);
 
-        String teamChosen = preferences.getString("teamChosen", "No team chosen");
+        //String teamChosen = preferences.getString("teamChosen", "No team chosen");
+        TextView myTeamTitle = findViewById(R.id.myTeamTitle);
+        String teamChosen = String.format("Team %s", preferences.getString("teamChosen", "No team chosen"));
+        myTeamTitle.setText(teamChosen);
 
 
         Amplify.API.query(
