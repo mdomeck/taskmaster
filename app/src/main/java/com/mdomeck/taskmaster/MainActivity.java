@@ -5,10 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -26,10 +23,12 @@ import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
+import java.time.chrono.MinguoChronology;
 import java.util.ArrayList;
 
 
@@ -39,14 +38,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     ArrayList<Task> tasks;
     Handler handler;
     int teamWeAreOnIndex = 0;
+    Handler handleCheckedLogin;
 
     @Override
     public void onResume() {
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-        myTaskTitle.setText(greeting);
+//        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+//        myTaskTitle.setText(greeting);
+
+        getIsSignedIn();
 
         //String teamChosen = preferences.getString("teamChosen", "No team chosen");
         TextView myTeamTitle = findViewById(R.id.myTeamTitle);
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         try {
             Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
 
             //setUpThreeTeams();
@@ -97,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         SharedPreferences.Editor preferenceEditor = preferences.edit();
 
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-        myTaskTitle.setText(greeting);
+        //String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
+       // myTaskTitle.setText(greeting);
 
 //        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
 //                .fallbackToDestructiveMigration()
@@ -120,6 +123,19 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                         return true;
                     }
                 });
+
+        handleCheckedLogin = new Handler(Looper.getMainLooper(), message -> {
+            if (message.arg1 == 0) {
+                Log.i("Amplify.login", "User not logged in");
+            } else if (message.arg1 == 1) {
+                Log.i("Amplify.login", "User logged in");
+                Log.i("Amplify.user", Amplify.Auth.getCurrentUser().getUsername());
+
+                String greeting = String.format("%s is logged in", Amplify.Auth.getCurrentUser().getUsername());
+                myTaskTitle.setText(greeting);
+            }
+            return false;
+        });
 
 
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
@@ -148,7 +164,58 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 startActivity(i);
             }
         });
+
+        Button signupUser = MainActivity.this.findViewById(R.id.signup_main);
+        signupUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SignUp.class);
+                startActivity(intent);
+            }
+        });
+
+        Button loginUser = MainActivity.this.findViewById(R.id.login_main);
+        loginUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+            }
+        });
+
+        ((Button) findViewById(R.id.signout_main)).setOnClickListener(view -> {
+            Amplify.Auth.signOut(
+                    () -> Log.i("Amplify.Signout", "sign out successful"),
+                    error -> Log.e("Amplify.Signout", error.toString())
+            );
+            Intent i = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(i);
+        });
+
+
+
     }
+
+
+    public void getIsSignedIn() {
+        Amplify.Auth.fetchAuthSession(
+                result -> {
+                    Log.i("Amplify.Login", result.toString());
+                    Message message = new Message();
+
+                    if (result.isSignedIn()) {
+                        message.arg1 = 1;
+                        handleCheckedLogin.sendMessage(message);
+                    } else {
+                        message.arg1 = 0;
+                        handleCheckedLogin.sendMessage(message);
+                    }
+                },
+                error -> Log.e("Amplify.Login", error.toString())
+        );
+    }
+
+
 
 
     public void setUpThreeTeams() {
