@@ -69,3 +69,14 @@
 
 - Home page only shows tasks for the team the user selects on the settings page.
 - Added a text view to display the team the user is on
+
+### Version 9.0
+![Home Page Lab 36](screenshots/lab36-homepage.png)
+
+![Home Page Lab 36](screenshots/lab36-signup.png)
+
+![Home Page Lab 36](screenshots/lab36-loggedIn.png)
+
+- Home page added Sign up, Login and Sign out buttons
+- Added Cognito to Amplify setup. Added user login and sign up. Displays logged in username on the homepage.
+- Logout button to sign out of the application
