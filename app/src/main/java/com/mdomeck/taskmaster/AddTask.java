@@ -24,6 +24,7 @@ import androidx.room.Room;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.NewFile;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
@@ -98,9 +99,16 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         .body(taskDescriptionTV.getText().toString())
                         .state("new").apartOf(chosenTeam).build();
 
+
                 Amplify.API.mutate(ModelMutation.create(addTask),
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
+
+//                NewFile newFile;
+//                newFile = NewFile.builder()
+//                        .belongsTo(addTask)
+//                        .title(lastFileIUploadedKey)
+//                        .build();
 
                 //    database.taskDao().saveTask(addTask);
 

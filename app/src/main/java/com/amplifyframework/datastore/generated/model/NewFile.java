@@ -1,6 +1,6 @@
 package com.amplifyframework.datastore.generated.model;
 
-import com.amplifyframework.core.model.annotations.HasMany;
+import com.amplifyframework.core.model.annotations.BelongsTo;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,32 +16,33 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the Team type in your schema. */
+/** This is an auto generated class representing the NewFile type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Teams")
-public final class Team implements Model {
+@ModelConfig(pluralName = "NewFiles")
+public final class NewFile implements Model {
   public static final QueryField ID = field("id");
-  public static final QueryField NAME = field("name");
-
+  public static final QueryField TITLE = field("title");
+  public static final QueryField BELONGS_TO = field("newFileBelongsToId");
 
   public final @ModelField(targetType="ID", isRequired = true) String id;
-  public final @ModelField(targetType="String") String name;
-  public final @ModelField(targetType="Task") @HasMany(associatedWith = "apartOf", type = Task.class) List<Task> tasks = null;
+  public final @ModelField(targetType="String") String title;
+  public final @ModelField(targetType="Task", isRequired = true) @BelongsTo(targetName = "newFileBelongsToId", type = Task.class) Task belongsTo;
   public String getId() {
       return id;
   }
   
-  public String getName() {
-      return name;
+  public String getTitle() {
+      return title;
   }
   
-  public List<Task> getTasks() {
-      return tasks;
+  public Task getBelongsTo() {
+      return belongsTo;
   }
   
-  public Team(String id, String name) {
+  public NewFile(String id, String title, Task belongsTo) {
     this.id = id;
-    this.name = name;
+    this.title = title;
+    this.belongsTo = belongsTo;
   }
   
   @Override
@@ -51,9 +52,10 @@ public final class Team implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      Team team = (Team) obj;
-      return ObjectsCompat.equals(getId(), team.getId()) &&
-              ObjectsCompat.equals(getName(), team.getName());
+      NewFile newFile = (NewFile) obj;
+      return ObjectsCompat.equals(getId(), newFile.getId()) &&
+              ObjectsCompat.equals(getTitle(), newFile.getTitle()) &&
+              ObjectsCompat.equals(getBelongsTo(), newFile.getBelongsTo());
       }
   }
   
@@ -61,7 +63,8 @@ public final class Team implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getName())
+      .append(getTitle())
+      .append(getBelongsTo())
       .toString()
       .hashCode();
   }
@@ -69,14 +72,15 @@ public final class Team implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("Team {")
+      .append("NewFile {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("name=" + String.valueOf(getName()))
+      .append("title=" + String.valueOf(getTitle()) + ", ")
+      .append("belongsTo=" + String.valueOf(getBelongsTo()))
       .append("}")
       .toString();
   }
   
-  public static BuildStep builder() {
+  public static BelongsToStep builder() {
       return new Builder();
   }
   
@@ -89,7 +93,7 @@ public final class Team implements Model {
    * @return an instance of this model with only ID populated
    * @throws IllegalArgumentException Checks that ID is in the proper format
    */
-  public static Team justId(String id) {
+  public static NewFile justId(String id) {
     try {
       UUID.fromString(id); // Check that ID is in the UUID format - if not an exception is thrown
     } catch (Exception exception) {
@@ -99,38 +103,54 @@ public final class Team implements Model {
               "creating a new object, use the standard builder method and leave the ID field blank."
       );
     }
-    return new Team(
+    return new NewFile(
       id,
+      null,
       null
     );
   }
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      name);
+      title,
+      belongsTo);
   }
-  public interface BuildStep {
-    Team build();
-    BuildStep id(String id) throws IllegalArgumentException;
-    BuildStep name(String name);
+  public interface BelongsToStep {
+    BuildStep belongsTo(Task belongsTo);
   }
   
 
-  public static class Builder implements BuildStep {
+  public interface BuildStep {
+    NewFile build();
+    BuildStep id(String id) throws IllegalArgumentException;
+    BuildStep title(String title);
+  }
+  
+
+  public static class Builder implements BelongsToStep, BuildStep {
     private String id;
-    private String name;
+    private Task belongsTo;
+    private String title;
     @Override
-     public Team build() {
+     public NewFile build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new Team(
+        return new NewFile(
           id,
-          name);
+          title,
+          belongsTo);
     }
     
     @Override
-     public BuildStep name(String name) {
-        this.name = name;
+     public BuildStep belongsTo(Task belongsTo) {
+        Objects.requireNonNull(belongsTo);
+        this.belongsTo = belongsTo;
+        return this;
+    }
+    
+    @Override
+     public BuildStep title(String title) {
+        this.title = title;
         return this;
     }
     
@@ -157,14 +177,20 @@ public final class Team implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String name) {
+    private CopyOfBuilder(String id, String title, Task belongsTo) {
       super.id(id);
-      super.name(name);
+      super.belongsTo(belongsTo)
+        .title(title);
     }
     
     @Override
-     public CopyOfBuilder name(String name) {
-      return (CopyOfBuilder) super.name(name);
+     public CopyOfBuilder belongsTo(Task belongsTo) {
+      return (CopyOfBuilder) super.belongsTo(belongsTo);
+    }
+    
+    @Override
+     public CopyOfBuilder title(String title) {
+      return (CopyOfBuilder) super.title(title);
     }
   }
   
