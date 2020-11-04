@@ -1,15 +1,13 @@
 package com.amplifyframework.datastore.generated.model;
 
 import com.amplifyframework.core.model.annotations.BelongsTo;
+import com.amplifyframework.core.model.annotations.HasOne;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.core.util.ObjectsCompat;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.annotations.Index;
@@ -21,8 +19,6 @@ import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
 /** This is an auto generated class representing the Task type in your schema. */
 @SuppressWarnings("all")
-
-@Entity
 @ModelConfig(pluralName = "Tasks")
 public final class Task implements Model {
   public static final QueryField ID = field("id");
@@ -31,13 +27,13 @@ public final class Task implements Model {
   public static final QueryField STATE = field("state");
   public static final QueryField APART_OF = field("taskApartOfId");
 
-  @NonNull
-  @PrimaryKey
+
   public final @ModelField(targetType="ID", isRequired = true) String id;
   public final @ModelField(targetType="String") String title;
   public final @ModelField(targetType="String") String body;
   public final @ModelField(targetType="String") String state;
   public final @ModelField(targetType="Team") @BelongsTo(targetName = "taskApartOfId", type = Team.class) Team apartOf;
+  public final @ModelField(targetType="NewFile") @HasOne(associatedWith = "belongsTo", type = NewFile.class) NewFile file = null;
   public String getId() {
       return id;
   }
@@ -56,6 +52,10 @@ public final class Task implements Model {
   
   public Team getApartOf() {
       return apartOf;
+  }
+  
+  public NewFile getFile() {
+      return file;
   }
   
   public Task(String id, String title, String body, String state, Team apartOf) {
