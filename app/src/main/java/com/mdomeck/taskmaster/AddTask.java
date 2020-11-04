@@ -2,16 +2,22 @@ package com.mdomeck.taskmaster;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -21,12 +27,20 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
     //  Database database;
     //int teamWeAreOnIndex = 0;
+    String lastFileIUploadedKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +60,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 error -> Log.e("Amplify", "failed to retrieve team")
         );
 
+        addListenersToButtons();
 //        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
 //                .fallbackToDestructiveMigration()
 //                .allowMainThreadQueries()
@@ -92,7 +107,75 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 4018) {
+            Log.i("Amplify.pickImage", "Got the imge back from the activity");
+
+            File fileCopy = new File(getFilesDir(), "test file");
+
+            try {
+                InputStream inStream = getContentResolver().openInputStream(data.getData());
+                FileUtils.copy(inStream, new FileOutputStream(fileCopy));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("Amplify.pickImage", e.toString());
+            }
+            uploadFile(fileCopy, fileCopy.getName() + Math.random());
+        } else if(requestCode == 2) {
+            Log.i("Amplify.doesnotexist", "this does not exist");
+        } else {
+            Log.i("Amplify.pickImage", "You picked an image");
+        }
+    }
+
+
+    public  void retrieveFile(){
+        Intent getPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getPicIntent.setType("*/*");
+        startActivityForResult(getPicIntent, 4018);
+    }
+
+    private void downloadFile(String fileKey){
+        Amplify.Storage.downloadFile(
+                fileKey,
+                new File(getApplicationContext().getFilesDir() + "/" + fileKey + ".txt"),
+                result -> {
+                    Log.i("Amplify.s3down", "Successfully downloaded: " + result.getFile().getName());
+                    ImageView image = findViewById(R.id.imageLastUploaded);
+                    image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getName()));
+                },
+                error -> Log.e("Amplify.s3down", "Download Failure", error)
+        );
+    }
+
+
+    public void uploadFile(File f, String key){
+        lastFileIUploadedKey = key;
+        Amplify.Storage.uploadFile(
+                key,
+                f,
+                result -> {
+                    Log.i("Amplify.s3", "Successfully uploaded: " + result.getKey());
+                    downloadFile(key);
+                },
+                storageFailure -> Log.e("Amplify.s3", "Upload failed", storageFailure)
+        );
+    }
+
+    public void addListenersToButtons(){
+        Button addPic = findViewById(R.id.add_photo_addtask);
+        addPic.setOnClickListener((view -> retrieveFile()));
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
