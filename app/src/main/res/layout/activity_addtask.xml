@@ -69,10 +69,9 @@
         android:id="@+id/buttonAddTaskSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="40dp"
         android:text="Add Task"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.192"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextStatus" />
 
@@ -140,5 +139,14 @@
             android:layout_height="wrap_content"
             android:text="Daisy" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/add_photo_addtask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonAddTaskSubmit"
+        tools:layout_editor_absoluteY="566dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
