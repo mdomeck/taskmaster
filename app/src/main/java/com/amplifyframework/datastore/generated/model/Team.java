@@ -23,7 +23,6 @@ public final class Team implements Model {
   public static final QueryField ID = field("id");
   public static final QueryField NAME = field("name");
 
-
   public final @ModelField(targetType="ID", isRequired = true) String id;
   public final @ModelField(targetType="String") String name;
   public final @ModelField(targetType="Task") @HasMany(associatedWith = "apartOf", type = Task.class) List<Task> tasks = null;

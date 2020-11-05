@@ -5,25 +5,12 @@ query GetTask($id: ID!) {
     title
     body
     state
+    filekey
     apartOf {
       id
       name
       tasks {
         nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    file {
-      id
-      title
-      belongsTo {
-        id
-        title
-        body
-        state
-        createdAt
-        updatedAt
       }
       createdAt
       updatedAt
@@ -43,15 +30,10 @@ query ListTasks(
       title
       body
       state
+      filekey
       apartOf {
         id
         name
-        createdAt
-        updatedAt
-      }
-      file {
-        id
-        title
         createdAt
         updatedAt
       }
@@ -71,6 +53,7 @@ query GetTeam($id: ID!) {
         title
         body
         state
+        filekey
         createdAt
         updatedAt
       }
@@ -91,57 +74,6 @@ query ListTeams(
       name
       tasks {
         nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    nextToken
-  }
-}
-query GetNewFile($id: ID!) {
-  getNewFile(id: $id) {
-    id
-    title
-    belongsTo {
-      id
-      title
-      body
-      state
-      apartOf {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      file {
-        id
-        title
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-query ListNewFiles(
-  $filter: ModelNewFileFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listNewFiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      title
-      belongsTo {
-        id
-        title
-        body
-        state
-        createdAt
-        updatedAt
       }
       createdAt
       updatedAt

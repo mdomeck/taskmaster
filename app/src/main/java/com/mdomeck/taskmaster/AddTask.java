@@ -94,9 +94,11 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 TextView taskTitleTV = findViewById(R.id.editTextMyTask);
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
 
+
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
+                        // add file key here
                         .state("new").apartOf(chosenTeam).build();
 
 
@@ -104,13 +106,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
 
-//                NewFile newFile;
-//                newFile = NewFile.builder()
-//                        .belongsTo(addTask)
-//                        .title(lastFileIUploadedKey)
-//                        .build();
-
-                //    database.taskDao().saveTask(addTask);
 
                 toast.show();
                 onBackPressed();
@@ -136,7 +131,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 InputStream inStream = getContentResolver().openInputStream(data.getData());
                 FileOutputStream out = new FileOutputStream(fileCopy);
                 copyStream(inStream, out);
-               // FileUtils.copy(inStream, new FileOutputStream(fileCopy));
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("Amplify.pickImage", e.toString());
@@ -187,7 +181,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
     public static void copyStream(InputStream in, OutputStream out) throws Exception {
         byte[] buffer = new byte[1024];
         int read;
-        while((read = in.read(buffer)) != -1){
+        while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
     }

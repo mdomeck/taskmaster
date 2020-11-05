@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 ModelQuery.list(Task.class),
                 response -> {
                     tasks.clear(); //keeps the same array list but empties it
+                    Log.i("Amplify", "here's whats in the response " + response.getData());
                     for (Task task : response.getData()) {
                         if (preferences.contains("teamChosen")) {
                             if (task.apartOf.getName().equals(preferences.getString("teamChosen", " "))) {
