@@ -5,25 +5,12 @@ subscription OnCreateTask {
     title
     body
     state
+    filekey
     apartOf {
       id
       name
       tasks {
         nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    file {
-      id
-      title
-      belongsTo {
-        id
-        title
-        body
-        state
-        createdAt
-        updatedAt
       }
       createdAt
       updatedAt
@@ -38,25 +25,12 @@ subscription OnUpdateTask {
     title
     body
     state
+    filekey
     apartOf {
       id
       name
       tasks {
         nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    file {
-      id
-      title
-      belongsTo {
-        id
-        title
-        body
-        state
-        createdAt
-        updatedAt
       }
       createdAt
       updatedAt
@@ -71,25 +45,12 @@ subscription OnDeleteTask {
     title
     body
     state
+    filekey
     apartOf {
       id
       name
       tasks {
         nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    file {
-      id
-      title
-      belongsTo {
-        id
-        title
-        body
-        state
-        createdAt
-        updatedAt
       }
       createdAt
       updatedAt
@@ -108,6 +69,7 @@ subscription OnCreateTeam {
         title
         body
         state
+        filekey
         createdAt
         updatedAt
       }
@@ -127,6 +89,7 @@ subscription OnUpdateTeam {
         title
         body
         state
+        filekey
         createdAt
         updatedAt
       }
@@ -146,94 +109,11 @@ subscription OnDeleteTeam {
         title
         body
         state
+        filekey
         createdAt
         updatedAt
       }
       nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-subscription OnCreateNewFile {
-  onCreateNewFile {
-    id
-    title
-    belongsTo {
-      id
-      title
-      body
-      state
-      apartOf {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      file {
-        id
-        title
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-subscription OnUpdateNewFile {
-  onUpdateNewFile {
-    id
-    title
-    belongsTo {
-      id
-      title
-      body
-      state
-      apartOf {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      file {
-        id
-        title
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-subscription OnDeleteNewFile {
-  onDeleteNewFile {
-    id
-    title
-    belongsTo {
-      id
-      title
-      body
-      state
-      apartOf {
-        id
-        name
-        createdAt
-        updatedAt
-      }
-      file {
-        id
-        title
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
     }
     createdAt
     updatedAt

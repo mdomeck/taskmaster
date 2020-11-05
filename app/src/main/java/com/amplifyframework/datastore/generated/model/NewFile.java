@@ -24,6 +24,7 @@ public final class NewFile implements Model {
   public static final QueryField TITLE = field("title");
   public static final QueryField BELONGS_TO = field("newFileBelongsToId");
 
+
   public final @ModelField(targetType="ID", isRequired = true) String id;
   public final @ModelField(targetType="String") String title;
   public final @ModelField(targetType="Task", isRequired = true) @BelongsTo(targetName = "newFileBelongsToId", type = Task.class) Task belongsTo;
