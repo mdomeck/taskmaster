@@ -26,7 +26,10 @@ import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.AnalyticsEvent;
+import com.amplifyframework.analytics.pinpoint.AWSPinpointAnalyticsPlugin;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
@@ -40,6 +43,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
@@ -141,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
+            Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
             
 
             //setUpThreeTeams();
@@ -247,6 +252,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         });
 
         getPinpointManager(getApplicationContext());
+
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("openedApp")
+                .addProperty("time", Long.toString(new Date().getTime()))
+                .addProperty("sofun", "we like tracking people")
+                .build();
+        Amplify.Analytics.recordEvent(event);
 
     }
 

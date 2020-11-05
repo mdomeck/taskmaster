@@ -94,28 +94,24 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 TextView taskTitleTV = findViewById(R.id.editTextMyTask);
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
 
-
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
-                        // add file key here
-                        .state("new").apartOf(chosenTeam).build();
-
+                        .state("new")
+                        .apartOf(chosenTeam)
+                        .filekey(lastFileIUploadedKey)
+                        .build();
 
                 Amplify.API.mutate(ModelMutation.create(addTask),
                         response -> Log.i("Amplify", "successfully added " + addTask.getTitle()),
                         error -> Log.e("amplify", error.toString()));
-
 
                 toast.show();
                 onBackPressed();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -143,7 +139,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         }
     }
 
-
     public void retrieveFile() {
         Intent getPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getPicIntent.setType("*/*");
@@ -162,7 +157,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 error -> Log.e("Amplify.s3down", "Download Failure", error)
         );
     }
-
 
     public void uploadFile(File f, String key) {
         lastFileIUploadedKey = key;
@@ -186,32 +180,10 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         }
     }
 
-    // https://stackoverflow.com/questions/9292954/how-to-make-a-copy-of-a-file-in-android
-//    public static void copy(File src, File dst) throws IOException {
-//        InputStream in = new FileInputStream(src);
-//        try {
-//            OutputStream out = new FileOutputStream(dst);
-//            try {
-//                // Transfer bytes from in to out
-//                byte[] buf = new byte[1024];
-//                int len;
-//                while ((len = in.read(buf)) > 0) {
-//                    out.write(buf, 0, len);
-//                }
-//            } finally {
-//                out.close();
-//            }
-//        } finally {
-//            in.close();
-//        }
-//    }
-
-
     public void addListenersToButtons() {
         Button addPic = findViewById(R.id.add_photo_addtask);
         addPic.setOnClickListener((view -> retrieveFile()));
     }
-
 
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);

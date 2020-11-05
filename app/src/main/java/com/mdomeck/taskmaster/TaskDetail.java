@@ -4,11 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.amplifyframework.core.Amplify;
+
+import java.io.File;
 
 public class TaskDetail extends AppCompatActivity {
 
@@ -27,6 +34,11 @@ public class TaskDetail extends AppCompatActivity {
         titleTask.setText(intent.getExtras().getString("title"));
         bodyTask.setText(intent.getExtras().getString("body"));
         stateTask.setText(intent.getExtras().getString("state"));
+
+        if(intent.getExtras().containsKey("fileKey")){
+            downloadFile(intent.getExtras().getString("fileKey"));
+        }
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -34,6 +46,19 @@ public class TaskDetail extends AppCompatActivity {
         startActivityForResult(mtIntent, 0);
         return true;
 
+    }
+
+    public void downloadFile(String fileKey) { // fileKey will be coming from intent atm } // code direction from Jack Nelson https://github.com/jnelsonjava/taskmaster/blob/main/app/src/main/java/com/jnelsonjava/taskmaster/AddTask.java
+        Amplify.Storage.downloadFile(
+                fileKey,
+                new File(getApplicationContext().getFilesDir() + "/" + fileKey + ".txt"),
+                result -> {
+                    Log.i("Amplify.s3dl", "Successful download: " + result.getFile().getName());
+                    ImageView image = findViewById(R.id.imageVDetailPage);
+                    image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getPath()));
+                },
+                error -> Log.e("Amplify.s3down", "Download Fail", error)
+        );
     }
 
 }
