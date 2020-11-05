@@ -50,6 +50,9 @@ dependencies {
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.19.0@aar'){ transitive = true}
 
 
+    implementation 'com.amplifyframework:aws-analytics-pinpoint:1.4.1'
+
+
     // Amplify core dependency
     implementation 'com.amplifyframework:core:1.4.1'
     implementation 'com.amplifyframework:aws-api:1.4.1'
