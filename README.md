@@ -80,3 +80,11 @@
 - Home page added Sign up, Login and Sign out buttons
 - Added Cognito to Amplify setup. Added user login and sign up. Displays logged in username on the homepage.
 - Logout button to sign out of the application
+
+### Version 10.0
+![AWS notification Lab 38](screenshots/lab38-awsNotification.png)
+
+![Firebase notification Lab 38](screenshots/lab38-firebase.png)
+
+- Added notification service through AWS and Firebase
+- Confirmation for both but the emulator is not yet receiving the message.
