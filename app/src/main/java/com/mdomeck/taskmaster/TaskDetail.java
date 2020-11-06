@@ -26,6 +26,7 @@ public class TaskDetail extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         Intent intent = getIntent();
         TextView titleTask = TaskDetail.this.findViewById(R.id.taskName);
         TextView bodyTask = TaskDetail.this.findViewById(R.id.loremIpsumTaskDetails);
@@ -38,7 +39,6 @@ public class TaskDetail extends AppCompatActivity {
         if(intent.getExtras().containsKey("fileKey")){
             downloadFile(intent.getExtras().getString("fileKey"));
         }
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -61,4 +61,18 @@ public class TaskDetail extends AppCompatActivity {
         );
     }
 
+
+//
+//    private void downloadFile(String fileKey) {
+//        Amplify.Storage.downloadFile(
+//                fileKey,
+//                new File(getApplicationContext().getFilesDir() + "/" + fileKey + ".txt"),
+//                result -> {
+//                    Log.i("Amplify.s3down", "Successfully downloaded: " + result.getFile().getName());
+//                    ImageView image = findViewById(R.id.imageLastUploaded);
+//                    image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getPath()));
+//                },
+//                error -> Log.e("Amplify.s3down", "Download Failure", error)
+//        );
+//    }
 }

@@ -15,6 +15,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
+import com.amplifyframework.core.Amplify;
+
+import java.util.Date;
+
 public class Settings extends AppCompatActivity {
 
 
@@ -40,6 +45,14 @@ public class Settings extends AppCompatActivity {
                 preferenceEditor.putString("savedUsername", username.getText().toString());
                 preferenceEditor.putString("teamChosen", userTeam);
                 preferenceEditor.apply();
+
+
+                AnalyticsEvent event = AnalyticsEvent.builder()
+                        .name("chooseTeam")
+                        .addProperty("time", Long.toString(new Date().getTime()))
+                        .addProperty("ChooseTeam", "picked a team")
+                        .build();
+                Amplify.Analytics.recordEvent(event);
 
                 onBackPressed();
             }

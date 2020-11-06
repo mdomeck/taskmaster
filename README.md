@@ -81,10 +81,27 @@
 - Added Cognito to Amplify setup. Added user login and sign up. Displays logged in username on the homepage.
 - Logout button to sign out of the application
 
-### Version 10.0
+## Version 10.0
+![Details Page Lab 37](screenshots/lab37-detailsPage.png)
+
+![Add Task Page Lab 37](screenshots/lab37-imageAddTask.png)
+
+- On Add Task activity allow user to select a file to attach to that task.
+- On Task detail activity if there is an image display within that activity
+
+### Version 11.0
 ![AWS notification Lab 38](screenshots/lab38-awsNotification.png)
+
+![Firebase emulator Lab 38](screenshots/lab38-emulator2.png)
 
 ![Firebase notification Lab 38](screenshots/lab38-firebase.png)
 
+![Firebase emulator Lab 38](screenshots/lab38-emulatorNotification.png)
+
 - Added notification service through AWS and Firebase
-- Confirmation for both but the emulator is not yet receiving the message.
+
+### Version 12.0
+
+![Analytics Lab 39](screenshots/lab39-analytics2.png)
+
+- Added Analytics when opening the app, adding a task on the add task page and picking a team on the setting page
