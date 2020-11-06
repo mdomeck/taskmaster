@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
@@ -107,8 +109,20 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         error -> Log.e("amplify", error.toString()));
 
                 toast.show();
+
+                AnalyticsEvent event = AnalyticsEvent.builder()
+                        .name("addTask")
+                        .addProperty("time", Long.toString(new Date().getTime()))
+                        .addProperty("addTask", "added a task")
+                        .build();
+                Amplify.Analytics.recordEvent(event);
+
+
+
                 onBackPressed();
+
             }
+
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

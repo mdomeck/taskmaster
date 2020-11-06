@@ -144,9 +144,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
-            Amplify.configure(getApplicationContext());
             Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
-            
+            Amplify.configure(getApplicationContext());
+
 
             //setUpThreeTeams();
 
@@ -310,9 +310,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 response -> Log.i("Amplify", "added a team"),
                 error -> Log.e("Amplify", "failed to add a team")
         );
-
     }
-
 
     @Override
     public void taskListener(Task task) {
@@ -320,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         intent.putExtra("title", task.getTitle());
         intent.putExtra("body", task.getBody());
         intent.putExtra("state", task.getState());
+        intent.putExtra("fileKey", task.getFilekey());
         this.startActivity(intent);
-
     }
 }
