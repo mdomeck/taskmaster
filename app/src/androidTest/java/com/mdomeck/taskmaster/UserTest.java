@@ -161,7 +161,7 @@ public class UserTest {
         appCompatEditText8.perform(pressImeActionButton());
 
         ViewInteraction appCompatEditText9 = onView(
-                allOf(withId(R.id.editTextStatus), withText("Status "),
+                allOf(withId(R.id.statusText), withText("Status "),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -171,7 +171,7 @@ public class UserTest {
         appCompatEditText9.perform(click());
 
         ViewInteraction appCompatEditText10 = onView(
-                allOf(withId(R.id.editTextStatus), withText("Status "),
+                allOf(withId(R.id.statusText), withText("Status "),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -181,7 +181,7 @@ public class UserTest {
         appCompatEditText10.perform(replaceText("Not done"));
 
         ViewInteraction appCompatEditText11 = onView(
-                allOf(withId(R.id.editTextStatus), withText("Not done"),
+                allOf(withId(R.id.statusText), withText("Not done"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -191,7 +191,7 @@ public class UserTest {
         appCompatEditText11.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatEditText12 = onView(
-                allOf(withId(R.id.editTextStatus), withText("Not done"),
+                allOf(withId(R.id.statusText), withText("Not done"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

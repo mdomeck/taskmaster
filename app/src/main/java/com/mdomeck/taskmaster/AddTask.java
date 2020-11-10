@@ -3,10 +3,9 @@ package com.mdomeck.taskmaster;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,22 +18,16 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.generated.model.NewFile;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -45,6 +38,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
     //  Database database;
     //int teamWeAreOnIndex = 0;
     String lastFileIUploadedKey;
+    Uri imageFromIntent;
 
 
     @Override
@@ -53,6 +47,18 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         setContentView(R.layout.activity_addtask);
 
         ArrayList<Team> teams = new ArrayList<>();
+
+        Intent intent = getIntent();
+        if (intent.getType() != null) {
+            Log.i("Amplify.addPic", "Within image/ this came out" + intent.toString());
+            //https://developer.android.com/guide/components/intents-common thanks Paul
+            //https://www.programcreek.com/java-api-examples/?class=android.content.Intent&method=getClipData thanks Bade
+            imageFromIntent = intent.getClipData().getItemAt(0).getUri();
+            Log.i("Amplify.uri", "this is the uri" + imageFromIntent.toString());
+
+            ImageView image = findViewById(R.id.imageLastUploaded);
+            image.setImageURI(imageFromIntent);
+        }
 
         Amplify.API.query(
                 ModelQuery.list(Team.class),
@@ -95,11 +101,29 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 
                 TextView taskTitleTV = findViewById(R.id.editTextMyTask);
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
+                TextView statusTV = findViewById(R.id.statusText);
+
+
+                if(lastFileIUploadedKey == null){
+
+                File fileCopy = new File(getFilesDir(), "image file");
+
+                try {
+                    InputStream inStream = getContentResolver().openInputStream(imageFromIntent);
+                    FileOutputStream out = new FileOutputStream(fileCopy);
+                    copyStream(inStream, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Amplify.pickImage", e.toString());
+                }
+                    //File newFileToUpload = new File(imageFromIntent.getPath());
+                    uploadFile(fileCopy, fileCopy.getName() + Math.random());
+                }
 
                 Task addTask = Task.builder()
                         .title(taskTitleTV.getText().toString())
                         .body(taskDescriptionTV.getText().toString())
-                        .state("new")
+                        .state(statusTV.getText().toString())
                         .apartOf(chosenTeam)
                         .filekey(lastFileIUploadedKey)
                         .build();
@@ -116,7 +140,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         .addProperty("addTask", "added a task")
                         .build();
                 Amplify.Analytics.recordEvent(event);
-
 
 
                 onBackPressed();
@@ -147,7 +170,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             }
             uploadFile(fileCopy, fileCopy.getName() + Math.random());
         } else if (requestCode == 2) {
-            Log.i("Amplify.doesnotexist", "this does not exist");
+            Log.i("Amplify.doesnotexist", "this does not exist"); //TODO add else if for URI
         } else {
             Log.i("Amplify.pickImage", "You picked an image");
         }
