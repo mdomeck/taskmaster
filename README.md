@@ -105,3 +105,14 @@
 ![Analytics Lab 39](screenshots/lab39-analytics2.png)
 
 - Added Analytics when opening the app, adding a task on the add task page and picking a team on the setting page
+
+
+### Version 13.0
+
+![Add image to app Lab 41](screenshots/lab41-add-to-app.png)
+![Task Detail Lab 41](screenshots/lab41-taskdetail.png)
+
+- Added an intent fileter to add an image from another application. Taken to the Add a task page. Able to save to task to a team.
+
+
+
