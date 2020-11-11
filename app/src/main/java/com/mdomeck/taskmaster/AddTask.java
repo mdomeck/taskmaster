@@ -49,8 +49,6 @@ import java.util.Locale;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-    //  Database database;
-    //int teamWeAreOnIndex = 0;
     String lastFileIUploadedKey;
     Uri imageFromIntent;
 
@@ -202,27 +200,11 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             }
         };
 
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-//            Toast t = new Toast(this);
-//            t.setText("You need to accept the permissions");
-//            t.setDuration(Toast.LENGTH_LONG);
-//            t.show();
-//            return;
-//        }
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
     }
-
 
     public void askForPermissionToUseLocation(){
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
@@ -230,7 +212,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 
     public void configureLocationServices(){
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
