@@ -64,17 +64,4 @@ public class TaskDetail extends AppCompatActivity {
     }
 
 
-//
-//    private void downloadFile(String fileKey) {
-//        Amplify.Storage.downloadFile(
-//                fileKey,
-//                new File(getApplicationContext().getFilesDir() + "/" + fileKey + ".txt"),
-//                result -> {
-//                    Log.i("Amplify.s3down", "Successfully downloaded: " + result.getFile().getName());
-//                    ImageView image = findViewById(R.id.imageLastUploaded);
-//                    image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getPath()));
-//                },
-//                error -> Log.e("Amplify.s3down", "Download Failure", error)
-//        );
-//    }
 }

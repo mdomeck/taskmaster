@@ -38,6 +38,9 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     Handler handler;
     int teamWeAreOnIndex = 0;
     Handler handleCheckedLogin;
+
+    private AdView mAdView;
 
     public static final String TAG = "Amplify";
 
@@ -99,12 +104,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-//        String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-//        myTaskTitle.setText(greeting);
 
         getIsSignedIn();
 
-        //String teamChosen = preferences.getString("teamChosen", "No team chosen");
         TextView myTeamTitle = findViewById(R.id.myTeamTitle);
         String teamChosen = String.format("Team %s", preferences.getString("teamChosen", "No team chosen"));
         myTeamTitle.setText(teamChosen);
@@ -159,15 +161,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         SharedPreferences.Editor preferenceEditor = preferences.edit();
 
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
-        //String greeting = String.format("%s's tasks", preferences.getString("savedUsername", "userTasks"));
-       // myTaskTitle.setText(greeting);
-
-//        database = Room.databaseBuilder(getApplicationContext(), Database.class, "mdomeck_tasks")
-//                .fallbackToDestructiveMigration()
-//                .allowMainThreadQueries()
-//                .build();
 
         tasks = new ArrayList<Task>();
+
+
+        MobileAds.initialize(this);
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

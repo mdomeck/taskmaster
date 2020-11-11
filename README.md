@@ -121,5 +121,9 @@
 
 - Location of task is added to task. Displayed on task details page and saved to database.
 
+### Version 15.0
 
 
+![Location Map Lab 42](screenshots/lab43-ad.png)
+
+- Added a banner ad to the app using Admob.
