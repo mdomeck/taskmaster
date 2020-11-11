@@ -9,6 +9,7 @@ mutation CreateTask(
     body
     state
     filekey
+    location
     apartOf {
       id
       name
@@ -32,6 +33,7 @@ mutation UpdateTask(
     body
     state
     filekey
+    location
     apartOf {
       id
       name
@@ -55,6 +57,7 @@ mutation DeleteTask(
     body
     state
     filekey
+    location
     apartOf {
       id
       name
@@ -82,6 +85,7 @@ mutation CreateTeam(
         body
         state
         filekey
+        location
         createdAt
         updatedAt
       }
@@ -105,6 +109,7 @@ mutation UpdateTeam(
         body
         state
         filekey
+        location
         createdAt
         updatedAt
       }
@@ -128,6 +133,7 @@ mutation DeleteTeam(
         body
         state
         filekey
+        location
         createdAt
         updatedAt
       }

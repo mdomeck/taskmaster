@@ -31,10 +31,12 @@ public class TaskDetail extends AppCompatActivity {
         TextView titleTask = TaskDetail.this.findViewById(R.id.taskName);
         TextView bodyTask = TaskDetail.this.findViewById(R.id.loremIpsumTaskDetails);
         TextView stateTask = TaskDetail.this.findViewById(R.id.descriptionTaskDetails);
+        TextView locationTask = TaskDetail.this.findViewById(R.id.taskdetail_address);
 
         titleTask.setText(intent.getExtras().getString("title"));
         bodyTask.setText(intent.getExtras().getString("body"));
         stateTask.setText(intent.getExtras().getString("state"));
+        locationTask.setText(intent.getExtras().getString("location"));
 
         if(intent.getExtras().containsKey("fileKey")){
             downloadFile(intent.getExtras().getString("fileKey"));

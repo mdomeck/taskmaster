@@ -1,8 +1,13 @@
 package com.mdomeck.taskmaster;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelMutation;
@@ -25,13 +31,21 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
@@ -40,6 +54,9 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
     String lastFileIUploadedKey;
     Uri imageFromIntent;
 
+    FusedLocationProviderClient locationProviderClient;
+    Location currentLocation;
+    String addressString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +64,10 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         setContentView(R.layout.activity_addtask);
 
         ArrayList<Team> teams = new ArrayList<>();
+        askForPermissionToUseLocation();
+        configureLocationServices();
+        askForLocation();
+
 
         Intent intent = getIntent();
         if (intent.getType() != null) {
@@ -103,19 +124,18 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                 TextView taskDescriptionTV = findViewById(R.id.editTextDoSomething);
                 TextView statusTV = findViewById(R.id.statusText);
 
+                if (lastFileIUploadedKey == null) {
 
-                if(lastFileIUploadedKey == null){
+                    File fileCopy = new File(getFilesDir(), "image file");
 
-                File fileCopy = new File(getFilesDir(), "image file");
-
-                try {
-                    InputStream inStream = getContentResolver().openInputStream(imageFromIntent);
-                    FileOutputStream out = new FileOutputStream(fileCopy);
-                    copyStream(inStream, out);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("Amplify.pickImage", e.toString());
-                }
+                    try {
+                        InputStream inStream = getContentResolver().openInputStream(imageFromIntent);
+                        FileOutputStream out = new FileOutputStream(fileCopy);
+                        copyStream(inStream, out);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("Amplify.pickImage", e.toString());
+                    }
                     //File newFileToUpload = new File(imageFromIntent.getPath());
                     uploadFile(fileCopy, fileCopy.getName() + Math.random());
                 }
@@ -125,6 +145,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
                         .body(taskDescriptionTV.getText().toString())
                         .state(statusTV.getText().toString())
                         .apartOf(chosenTeam)
+                        .location(addressString)
                         .filekey(lastFileIUploadedKey)
                         .build();
 
@@ -150,6 +171,68 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+
+    public void askForLocation() {
+
+        LocationRequest locationRequest;
+        LocationCallback locationCallback;
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(60000);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                currentLocation = locationResult.getLastLocation();
+                Log.i("Amplify_location", currentLocation.toString());
+
+                Geocoder geocoder = new Geocoder(AddTask.this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 10);
+                    Log.i("Amplify_location", addresses.get(0).toString());
+                    addressString = addresses.get(0).getAddressLine(0);
+                    Log.i("Amplify_location", addressString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+//            Toast t = new Toast(this);
+//            t.setText("You need to accept the permissions");
+//            t.setDuration(Toast.LENGTH_LONG);
+//            t.show();
+//            return;
+//        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+    }
+
+
+    public void askForPermissionToUseLocation(){
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+    }
+
+    public void configureLocationServices(){
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -170,7 +253,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             }
             uploadFile(fileCopy, fileCopy.getName() + Math.random());
         } else if (requestCode == 2) {
-            Log.i("Amplify.doesnotexist", "this does not exist"); //TODO add else if for URI
+            Log.i("Amplify.doesnotexist", "this does not exist");
         } else {
             Log.i("Amplify.pickImage", "You picked an image");
         }

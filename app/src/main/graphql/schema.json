@@ -241,6 +241,18 @@
                         "deprecationReason": null
                     },
                     {
+                        "name": "location",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
                         "name": "apartOf",
                         "description": null,
                         "args": [],
@@ -472,6 +484,16 @@
                     },
                     {
                         "name": "filekey",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "location",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -1459,6 +1481,16 @@
                         "defaultValue": null
                     },
                     {
+                        "name": "location",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
                         "name": "taskApartOfId",
                         "description": null,
                         "type": {
@@ -1511,6 +1543,16 @@
                     },
                     {
                         "name": "filekey",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "location",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -1614,6 +1656,16 @@
                     },
                     {
                         "name": "filekey",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "location",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",

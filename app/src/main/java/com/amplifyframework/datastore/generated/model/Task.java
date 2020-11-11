@@ -25,13 +25,16 @@ public final class Task implements Model {
   public static final QueryField BODY = field("body");
   public static final QueryField STATE = field("state");
   public static final QueryField FILEKEY = field("filekey");
+  public static final QueryField LOCATION = field("location");
   public static final QueryField APART_OF = field("taskApartOfId");
+
 
   public final @ModelField(targetType="ID", isRequired = true) String id;
   public final @ModelField(targetType="String") String title;
   public final @ModelField(targetType="String") String body;
   public final @ModelField(targetType="String") String state;
   public final @ModelField(targetType="String") String filekey;
+  public final @ModelField(targetType="String") String location;
   public final @ModelField(targetType="Team") @BelongsTo(targetName = "taskApartOfId", type = Team.class) Team apartOf;
   public String getId() {
       return id;
@@ -53,16 +56,21 @@ public final class Task implements Model {
       return filekey;
   }
   
+  public String getLocation() {
+      return location;
+  }
+  
   public Team getApartOf() {
       return apartOf;
   }
   
-  public Task(String id, String title, String body, String state, String filekey, Team apartOf) {
+  public Task(String id, String title, String body, String state, String filekey, String location, Team apartOf) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.state = state;
     this.filekey = filekey;
+    this.location = location;
     this.apartOf = apartOf;
   }
   
@@ -79,6 +87,7 @@ public final class Task implements Model {
               ObjectsCompat.equals(getBody(), task.getBody()) &&
               ObjectsCompat.equals(getState(), task.getState()) &&
               ObjectsCompat.equals(getFilekey(), task.getFilekey()) &&
+              ObjectsCompat.equals(getLocation(), task.getLocation()) &&
               ObjectsCompat.equals(getApartOf(), task.getApartOf());
       }
   }
@@ -91,6 +100,7 @@ public final class Task implements Model {
       .append(getBody())
       .append(getState())
       .append(getFilekey())
+      .append(getLocation())
       .append(getApartOf())
       .toString()
       .hashCode();
@@ -105,6 +115,7 @@ public final class Task implements Model {
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("state=" + String.valueOf(getState()) + ", ")
       .append("filekey=" + String.valueOf(getFilekey()) + ", ")
+      .append("location=" + String.valueOf(getLocation()) + ", ")
       .append("apartOf=" + String.valueOf(getApartOf()))
       .append("}")
       .toString();
@@ -139,6 +150,7 @@ public final class Task implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -149,6 +161,7 @@ public final class Task implements Model {
       body,
       state,
       filekey,
+      location,
       apartOf);
   }
   public interface BuildStep {
@@ -158,6 +171,7 @@ public final class Task implements Model {
     BuildStep body(String body);
     BuildStep state(String state);
     BuildStep filekey(String filekey);
+    BuildStep location(String location);
     BuildStep apartOf(Team apartOf);
   }
   
@@ -168,6 +182,7 @@ public final class Task implements Model {
     private String body;
     private String state;
     private String filekey;
+    private String location;
     private Team apartOf;
     @Override
      public Task build() {
@@ -179,6 +194,7 @@ public final class Task implements Model {
           body,
           state,
           filekey,
+          location,
           apartOf);
     }
     
@@ -203,6 +219,12 @@ public final class Task implements Model {
     @Override
      public BuildStep filekey(String filekey) {
         this.filekey = filekey;
+        return this;
+    }
+    
+    @Override
+     public BuildStep location(String location) {
+        this.location = location;
         return this;
     }
     
@@ -235,12 +257,13 @@ public final class Task implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, String state, String filekey, Team apartOf) {
+    private CopyOfBuilder(String id, String title, String body, String state, String filekey, String location, Team apartOf) {
       super.id(id);
       super.title(title)
         .body(body)
         .state(state)
         .filekey(filekey)
+        .location(location)
         .apartOf(apartOf);
     }
     
@@ -262,6 +285,11 @@ public final class Task implements Model {
     @Override
      public CopyOfBuilder filekey(String filekey) {
       return (CopyOfBuilder) super.filekey(filekey);
+    }
+    
+    @Override
+     public CopyOfBuilder location(String location) {
+      return (CopyOfBuilder) super.location(location);
     }
     
     @Override
