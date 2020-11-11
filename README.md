@@ -112,7 +112,14 @@
 ![Add image to app Lab 41](screenshots/lab41-add-to-app.png)
 ![Task Detail Lab 41](screenshots/lab41-taskdetail.png)
 
-- Added an intent fileter to add an image from another application. Taken to the Add a task page. Able to save to task to a team.
+- Added an intent filter to add an image from another application. Taken to the Add a task page. Able to save to task to a team.
+
+### Version 14.0
+
+![Add Location Lab 42](screenshots/lab42-location.png)
+![Location Map Lab 42](screenshots/lab42-map.png)
+
+- Location of task is added to task. Displayed on task details page and saved to database.
 
 
 
