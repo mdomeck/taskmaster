@@ -6,6 +6,7 @@ query GetTask($id: ID!) {
     body
     state
     filekey
+    location
     apartOf {
       id
       name
@@ -31,6 +32,7 @@ query ListTasks(
       body
       state
       filekey
+      location
       apartOf {
         id
         name
@@ -54,6 +56,7 @@ query GetTeam($id: ID!) {
         body
         state
         filekey
+        location
         createdAt
         updatedAt
       }

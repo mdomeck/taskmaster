@@ -282,8 +282,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     }
 
 
-
-
     public void setUpThreeTeams() {
         Team team1 = Team.builder()
                 .name("Mickey")
@@ -318,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         intent.putExtra("title", task.getTitle());
         intent.putExtra("body", task.getBody());
         intent.putExtra("state", task.getState());
+        intent.putExtra("location", task.getLocation());
         intent.putExtra("fileKey", task.getFilekey());
         this.startActivity(intent);
     }
