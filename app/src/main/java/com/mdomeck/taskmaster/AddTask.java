@@ -170,7 +170,7 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
             }
             uploadFile(fileCopy, fileCopy.getName() + Math.random());
         } else if (requestCode == 2) {
-            Log.i("Amplify.doesnotexist", "this does not exist"); //TODO add else if for URI
+            Log.i("Amplify.doesnotexist", "this does not exist");
         } else {
             Log.i("Amplify.pickImage", "You picked an image");
         }
