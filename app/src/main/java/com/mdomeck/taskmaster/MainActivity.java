@@ -38,6 +38,9 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     Handler handler;
     int teamWeAreOnIndex = 0;
     Handler handleCheckedLogin;
+
+    private AdView mAdView;
 
     public static final String TAG = "Amplify";
 
@@ -158,6 +163,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
 
         tasks = new ArrayList<Task>();
+
+
+        MobileAds.initialize(this);
+        mAdView = findViewById(R.id.adView_main);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         RecyclerView recyclerView = findViewById(R.id.taskRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
