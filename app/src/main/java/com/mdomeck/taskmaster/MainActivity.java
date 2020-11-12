@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
 
         tasks = new ArrayList<Task>();
 
-
         MobileAds.initialize(this);
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();

@@ -124,17 +124,5 @@
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
     </com.google.android.gms.ads.AdView>
 
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        android:id="@+id/adView_main"-->
-<!--        android:layout_width="369dp"-->
-<!--        android:layout_height="61dp"-->
-<!--        app:adSize="BANNER"-->
-<!--        app:adUnitId="ca-app-pub-1868733521318045/8693460230"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.505"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/settingsButtonHome"-->
-<!--        app:layout_constraintVertical_bias="0.4" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
