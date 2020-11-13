@@ -124,6 +124,11 @@
 ### Version 15.0
 
 
-![Location Map Lab 42](screenshots/lab43-ad.png)
+![Main Page Ad Lab 43](screenshots/lab43-ad.png)
 
 - Added a banner ad to the app using Admob.
+
+![Home Page Lab 44](screenshots/lab44-homepage.png)
+
+- moved location permission to main page. 
+- cleaned up code and removed all tasks that was not in use
