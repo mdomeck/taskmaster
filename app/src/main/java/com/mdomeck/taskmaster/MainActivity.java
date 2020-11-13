@@ -3,12 +3,19 @@ package com.mdomeck.taskmaster;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,21 +48,32 @@ import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-    // Database database;
     ArrayList<Task> tasks;
     Handler handler;
     int teamWeAreOnIndex = 0;
     Handler handleCheckedLogin;
+
+    FusedLocationProviderClient locationProviderClient;
+    Location currentLocation;
+    String addressString;
 
     private AdView mAdView;
 
@@ -132,11 +150,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 error -> Log.i("Amplify.queryItems", "did not get items"));
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -149,13 +165,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
             Amplify.configure(getApplicationContext());
 
-
-            //setUpThreeTeams();
-
-            //Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
+
+        Log.i("Amplify.permission", "running on create");
+
+        askForPermissionToUseLocation();
+        configureLocationServices();
+        askForLocation();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor preferenceEditor = preferences.edit();
@@ -163,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         TextView myTaskTitle = findViewById(R.id.myTaskTitle);
 
         tasks = new ArrayList<Task>();
-
 
         MobileAds.initialize(this);
         mAdView = findViewById(R.id.adView);
@@ -197,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             return false;
         });
 
-
         Button addTaskButton = MainActivity.this.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,15 +228,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, Settings.class);
-                startActivity(i);
-            }
-        });
-
-        Button allTasksButton = MainActivity.this.findViewById(R.id.allTasksButton);
-        allTasksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, AllTasks.class);
                 startActivity(i);
             }
         });
@@ -260,14 +267,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 .addProperty("sofun", "we like tracking people")
                 .build();
         Amplify.Analytics.recordEvent(event);
-
     }
-
 
     public void getIsSignedIn() {
         Amplify.Auth.fetchAuthSession(
                 result -> {
-                 //   Log.i("Amplify.Login", result.toString());
+                    //   Log.i("Amplify.Login", result.toString());
                     Message message = new Message();
 
                     if (result.isSignedIn()) {
@@ -281,7 +286,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 error -> Log.e("Amplify.Login", error.toString())
         );
     }
-
 
     public void setUpThreeTeams() {
         Team team1 = Team.builder()
@@ -309,6 +313,51 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
                 response -> Log.i("Amplify", "added a team"),
                 error -> Log.e("Amplify", "failed to add a team")
         );
+    }
+
+    public void askForLocation() {
+
+        LocationRequest locationRequest;
+        LocationCallback locationCallback;
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(60000);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                currentLocation = locationResult.getLastLocation();
+                Log.i("Amplify_location", currentLocation.toString());
+
+                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 10);
+                    Log.i("Amplify_location", addresses.get(0).toString());
+                    addressString = addresses.get(0).getAddressLine(0);
+                    Log.i("Amplify_location", addressString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+    }
+
+    public void askForPermissionToUseLocation() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+    }
+
+    public void configureLocationServices() {
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override

@@ -26,25 +26,13 @@
         android:id="@+id/addTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="68dp"
         android:layout_marginTop="64dp"
         android:text="@string/add_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskRecycler"
-        app:layout_constraintVertical_bias="0.166" />
-
-    <Button
-        android:id="@+id/allTasksButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="36dp"
-        android:text="@string/all_tasks"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskRecycler"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/settingsButtonHome"
@@ -53,20 +41,19 @@
         android:layout_marginTop="64dp"
         android:text="@string/settings"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/allTasksButton"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addTaskButton"
         app:layout_constraintTop_toBottomOf="@+id/taskRecycler"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/taskRecycler"
         android:layout_width="324dp"
         android:layout_height="246dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginBottom="228dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -114,27 +101,18 @@
 
 
     <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-    </com.google.android.gms.ads.AdView>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"></com.google.android.gms.ads.AdView>
 
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        android:id="@+id/adView_main"-->
-<!--        android:layout_width="369dp"-->
-<!--        android:layout_height="61dp"-->
-<!--        app:adSize="BANNER"-->
-<!--        app:adUnitId="ca-app-pub-1868733521318045/8693460230"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.505"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/settingsButtonHome"-->
-<!--        app:layout_constraintVertical_bias="0.4" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

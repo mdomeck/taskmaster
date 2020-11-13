@@ -21,7 +21,6 @@ public class TaskFragment extends Fragment {
     private static final String ARG_PARAM2 = "body";
     private static final String ARG_PARAM3 = "state";
 
-
     // TODO: Rename and change types of parameters
     private String mTitle;
     private String mBody;
