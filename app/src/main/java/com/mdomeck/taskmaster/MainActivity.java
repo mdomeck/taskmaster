@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,7 +66,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInteractingWithTaskListener {
 
-    // Database database;
     ArrayList<Task> tasks;
     Handler handler;
     int teamWeAreOnIndex = 0;
@@ -232,15 +232,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
             }
         });
 
-        Button allTasksButton = MainActivity.this.findViewById(R.id.allTasksButton);
-        allTasksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, AllTasks.class);
-                startActivity(i);
-            }
-        });
-
         Button signupUser = MainActivity.this.findViewById(R.id.signup_main);
         signupUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
     public void getIsSignedIn() {
         Amplify.Auth.fetchAuthSession(
                 result -> {
-                 //   Log.i("Amplify.Login", result.toString());
+                    //   Log.i("Amplify.Login", result.toString());
                     Message message = new Message();
 
                     if (result.isSignedIn()) {
@@ -361,11 +352,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnInt
         locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
     }
 
-    public void askForPermissionToUseLocation(){
+    public void askForPermissionToUseLocation() {
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
     }
 
-    public void configureLocationServices(){
+    public void configureLocationServices() {
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 

@@ -24,8 +24,7 @@ public class TaskDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         TextView titleTask = TaskDetail.this.findViewById(R.id.taskName);
@@ -47,7 +46,6 @@ public class TaskDetail extends AppCompatActivity {
         Intent mtIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivityForResult(mtIntent, 0);
         return true;
-
     }
 
     public void downloadFile(String fileKey) { // fileKey will be coming from intent atm } // code direction from Jack Nelson https://github.com/jnelsonjava/taskmaster/blob/main/app/src/main/java/com/jnelsonjava/taskmaster/AddTask.java
@@ -62,6 +60,5 @@ public class TaskDetail extends AppCompatActivity {
                 error -> Log.e("Amplify.s3down", "Download Fail", error)
         );
     }
-
 
 }

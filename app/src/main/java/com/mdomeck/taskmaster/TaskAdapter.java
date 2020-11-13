@@ -32,27 +32,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
     }
 
-
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_task, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_task, parent, false);
 
-            final TaskViewHolder viewHolder = new TaskViewHolder(view);
+        final TaskViewHolder viewHolder = new TaskViewHolder(view);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println(" this is the task title on click " + viewHolder.task.getTitle());
-                    listener.taskListener(viewHolder.task);
-                }
-            });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(" this is the task title on click " + viewHolder.task.getTitle());
+                listener.taskListener(viewHolder.task);
+            }
+        });
 
         return viewHolder;
     }
 
-    public static interface OnInteractingWithTaskListener{
+    public static interface OnInteractingWithTaskListener {
         public void taskListener(Task task);
     }
 
@@ -66,16 +65,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         titleTextView.setText(holder.task.getTitle());
         bodyTextView.setText(holder.task.getBody());
         stateTextView.setText(holder.task.getState());
-
-
     }
 
     @Override
     public int getItemCount() {
         return task.size();
     }
-
-
-
 
 }

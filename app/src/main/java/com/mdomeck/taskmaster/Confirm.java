@@ -17,7 +17,6 @@ public class Confirm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
 
-
         ((Button) findViewById(R.id.submit_signup)).setOnClickListener(view -> {
 
         EditText username = findViewById(R.id.user_signup);
@@ -32,7 +31,6 @@ public class Confirm extends AppCompatActivity {
             Intent i = new Intent(Confirm.this, Login.class);
             this.startActivity(i);
         });
-
     }
 
 }
