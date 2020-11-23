@@ -24,8 +24,6 @@ public class TaskDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
         TextView titleTask = TaskDetail.this.findViewById(R.id.taskName);
         TextView bodyTask = TaskDetail.this.findViewById(R.id.loremIpsumTaskDetails);
