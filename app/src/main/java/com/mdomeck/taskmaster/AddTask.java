@@ -60,10 +60,8 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtask);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayList<Team> teams = new ArrayList<>();
-//        askForPermissionToUseLocation();
         configureLocationServices();
         askForLocation();
 
@@ -91,7 +89,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
         );
 
         addListenersToButtons();
-
 
         Context context = getApplicationContext();
         CharSequence text = "Submitted!";
@@ -164,7 +161,6 @@ public class AddTask extends AppCompatActivity implements TaskAdapter.OnInteract
 
         });
     }
-
 
     public void askForLocation() {
 
